@@ -1,6 +1,6 @@
 [submodule "vim/bundle/neobundle.vim"]
 	path = vim/bundle/neobundle.vim
-	url = git@github.com:Shougo/vimproc.vim.git
+	url = git@github.com:Shougo/neobundle.vim
 [submodule "base16-shell"]
 	path = base16-shell
 	url = git@github.com:chriskempson/base16-shell.git
