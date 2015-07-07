@@ -52,7 +52,6 @@ df_makepkg()     { link makepkg/makepkg.conf;                            }
 df_mpd()         { link mpd/mpd.conf .config/mpd.conf;                   }
 df_systemd()     { link systemd .config/systemd;                         }
 df_termite()     { link termite .config/termite;                         }
-df_tmux()        { link tmux/tmux.conf;                                  }
 df_user-dirs()   { link user-dirs/user-dirs.dirs .config/user-dirs.dirs; }
 df_vimperator()  { link vimperator/vimperatorrc;                         }
 df_weechat()     { link weechat;                                         }
