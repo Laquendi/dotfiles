@@ -1,204 +1,203 @@
-" file:     ~/.vimrc files
-" author:   Simon Gomizelj
-" ----------------------------------------------------------------------------
+set nocompatible               " be iMproved
 
-set nocompatible
+set runtimepath+=/home/santtu/.vim/bundle/neobundle.vim/
+call neobundle#begin(expand('/home/santtu/.vim/bundle'))
 
-filetype off
-runtime bundle/pathogen/autoload/pathogen.vim
-call pathogen#infect('bundle/{}')
-call pathogen#helptags()
+" My Bundles here:
+NeoBundle 'gmarik/vundle'
+NeoBundle 'scrooloose/nerdcommenter'
+NeoBundle 'chriskempson/base16-vim'
+NeoBundle 'travitch/hasksyn'
+"NeoBundle 'Twinside/vim-haskellConceal'
+NeoBundle 'kien/rainbow_parentheses.vim'
+NeoBundle 'Shougo/vimproc.vim', {
+      \ 'build' : {
+      \     'windows' : 'tools\\update-dll-mingw',
+      \     'cygwin' : 'make -f make_cygwin.mak',
+      \     'mac' : 'make -f make_mac.mak',
+      \     'unix' : 'make -f make_unix.mak',
+      \    },
+      \ }
 
-syntax on
-filetype plugin indent on
-colorscheme jellybeans
+"NeoBundle 'eagletmt/ghcmod-vim'
+NeoBundle 'vim-scripts/Superior-Haskell-Interaction-Mode-SHIM'
+NeoBundle 'dan-t/vim-hdevtools'
+NeoBundle 'scrooloose/syntastic'
+NeoBundle 'junegunn/vim-easy-align'
+NeoBundle 'slim-template/vim-slim'
+NeoBundle 'pbrisbin/vim-syntax-shakespeare'
+NeoBundle 'leafgarland/typescript-vim'
+NeoBundle 'jason0x43/vim-js-indent'
 
-" GENERAL {{{1
-" -----------------------------
+call neobundle#end()
 
-" formatting
-set tabstop=4
-set shiftwidth=4
-set softtabstop=2
-set cinoptions=(0
-set smartindent
-set linebreak
+filetype plugin indent on     " required! 
+
+" If there are uninstalled bundles found on startup,
+" this will conveniently prompt you to install them.
+NeoBundleCheck
+
+nmap <Leader>u :so /home/santtu/.vimrc<cr>
+
+" Start interactive EasyAlign in visual mode (e.g. vip<Enter>)
+vmap <Enter> <Plug>(EasyAlign)
+" Start interactive EasyAlign for a motion/text object (e.g. <Leader>aip)
+nmap <Leader>o <Plug>(EasyAlign)
+let g:easy_align_delimiters = {
+\ ':': { 'pattern': '::' },
+\ '<': { 'pattern': '-<' },
+\ '>': { 'pattern': '->' },
+\ '-': { 'pattern': '-<' }
+\}
+
+"syntastic
+let g:syntastic_mode_map = { 'mode': 'passive', 'active_filetypes': [],'passive_filetypes': [] }
+nmap <leader>a :SyntasticCheck<CR> :SyntasticToggleMode<CR>
+
+"shim
+let g:shim_ghciInterp = "cabal exec ghci"
+
+syntax enable
+set background=dark
+let base16colorspace=256
+colorscheme base16-default
+
 set nowrap
-set textwidth=72
-set wrapmargin=0
-set whichwrap+=<,>,[,],h,l
-set formatoptions=qn1
-
-" searching
+set nu
+set history=1000
 set hlsearch
-set smartcase
-set incsearch
+"set mouse=a
 
-" editing
-set list listchars=tab:→\ ,extends:$,precedes:^,trail:-
-set nrformats+=alpha
+set scrolloff=8
+set sidescrolloff=0
+set sidescroll=0
+set backspace=indent,eol,start " Allow backspecing over everything in insert mode
 
-" folding
-set foldenable
-set foldmethod=marker
-set foldmarker={{{,}}}
-set foldcolumn=1
-set backspace=indent,eol,start
+set ignorecase
+"set smartcase
 
-" spelling
-set spelllang=en_ca
-set spellfile=~/.vim/dict.add
+set tabstop=2
+set shiftwidth=2
+"set smarttab " Smart tabbing
+set expandtab
+"autocmd BufRead,BufNewFile   *.rb,*.slim,*.js set shiftwidth=2
 
-" vim ui
-set autoread
-set autowrite
-set showcmd
-set title
-set ruler
-set number
-set cursorline
-set shortmess=at
-set hidden
-set laststatus=2
-set scrolloff=3
-set wildmenu wildmode=list:longest,full
-set completeopt=longest,menuone
-set history=50
-set confirm
-set equalalways
-set lazyredraw
+set cindent
+set cinoptions=g-1 " public: private: protected: no indent
 
-if has('mouse')
-  set mouse=a
+"tabcomplete
+set wildignorecase
+set wildmode=longest,list,full
+set wildmenu
+
+"set iskeyword-=_
+
+if has("unix")
+    set backup
+    set backupdir=/tmp
+    set directory=/tmp
+elseif has("win32")
+    set backup
+    set backupdir=C:\Windows\Temp
+    set noswapfile
 endif
 
-set wildignore+=.hg,.git,.svn                  " version control
-set wildignore+=*.aux,*.out,*.toc              " LaTeX intermediate files
-set wildignore+=*.jpg,*.bmp,*.gif,*.png,*.jpeg " images files
-set wildignore+=*.a,*.o,*.obj,*.so,*.hi        " compiled object files
-set wildignore+=*.pyc                          " python byte code
-set wildignore+=*.spl                          " compiled spell lists
+"Key mappings
+let mapleader = "\\"
 
-" backup
-set dir=~/.vim/tmp
-set backup   backupdir=~/.vim/swap
-set undofile undodir=~/.vim/undo
+no Q <Nop>
 
-" AUTOCMDS {{{1
-" ----------------------------
-au VimResized   * exe "normal! \<c-w>="
-au BufWritePost * if getline(1) =~ "^#!" | silent :!chmod +x <afile>
+no <leader>p :HLint<cr>
 
-" MAPPINGS {{{1
-" ----------------------------
+no + :cn<cr>
+no - :cp<cr>
 
-" for common typos
-command! Q q
-command! W w
-command! Qa qa
-command! Wq wq
-command! Wa wa
-command! Wqa wqa
+no <leader><space> :noh<cr>
 
-command! Ww w !wc -w
+autocmd FileType haskell nmap <leader>t :HdevtoolsType<cr>
+autocmd FileType haskell nmap <leader>n :HdevtoolsClear<cr>
+autocmd FileType haskell nmap <leader>c :GhcModCheck<cr>
+autocmd FileType haskell nmap <leader>l :GhcModLint<cr>
+autocmd FileType haskell nmap <leader>f :GhciFile<cr>
+autocmd FileType haskell nmap <leader>R :GhciReload<cr>
+autocmd FileType haskell nmap <leader>r :GhciRange<cr>
+autocmd FileType haskell vmap <leader>r y:put<cr>:GhciRange<cr>dd
 
-" sane j k actions
-nnoremap j gj
-nnoremap k gk
+noremap <C-j> <C-w>j
+noremap <C-k> <C-w>k
+noremap <C-h> <C-w>h
+noremap <C-l> <C-w>l
 
-" map Y to act like D and C; yank till end of line
-noremap Y y$
+nmap <Leader>i <plug>NERDCommenterInvert
+xmap <Leader>i <plug>NERDCommenterInvert
+nmap <Leader>m <plug>NERDCommenterMinimal
+xmap <Leader>m <plug>NERDCommenterMinimal
+nmap <Leader>u <plug>NERDCommenterUncomment
+xmap <Leader>u <plug>NERDCommenterUncomment
+"nmap <Leader>a <plug>NERDCommenterAltDelims
+"xmap <Leader>a <plug>NERDCommenterAltDelims
 
-nnoremap <silent> <leader>c :call toggle#ToggleList("Quickfix List", 'c')<CR>
-nnoremap <silent> <leader>d :diffupdate<CR>
-nnoremap <silent> <leader>h :nohl<CR>
-nnoremap <silent> <leader>l :ls<CR>:b<space>
-nnoremap <silent> <leader>s :setl spell!<CR>
-nnoremap <silent> <leader>p :!pastebin "%"<CR>
-nnoremap <silent> <leader>x :silent! call spaces#StripTrailing()<CR>
+set pastetoggle=<F4>
 
-" strip trailing spaces
-noremap <silent> <leader>w :call spaces#StripTrailing()<CR>
+"hdevtools tmp
+function! FindCabalSandboxRoot()
+    return finddir('.cabal-sandbox', './;')
+endfunction
+function! FindCabalSandboxRootPackageConf()
+    return glob(FindCabalSandboxRoot().'/*-packages.conf.d')
+endfunction
+let g:hdevtools_options = '-g-ilib -g-isrc -g-i. -g-idist/build/autogen -g-Wall -g-package-conf='.FindCabalSandboxRootPackageConf()
 
-" window movements
-nnoremap <silent> <C-H> :winc h<CR>
-nnoremap <silent> <C-J> :winc j<CR>
-nnoremap <silent> <C-K> :winc k<CR>
-nnoremap <silent> <C-L> :winc l<CR>
+let g:rbpt_colorpairs = [
+    \ ['black',       'SeaGreen3'],
+    \ ['brown',       'RoyalBlue3'],
+    \ ['Darkblue',    'SeaGreen3'],
+    \ ['darkgray',    'DarkOrchid3'],
+    \ ['darkgreen',   'firebrick3'],
+    \ ['darkcyan',    'RoyalBlue3'],
+    \ ['darkred',     'SeaGreen3'],
+    \ ['darkmagenta', 'DarkOrchid3'],
+    \ ['red',         'firebrick3'],
+    \ ['brown',       'firebrick3'],
+    \ ['gray',        'RoyalBlue3'],
+    \ ['darkmagenta', 'DarkOrchid3'],
+    \ ['Darkblue',    'firebrick3'],
+    \ ['darkcyan',    'SeaGreen3'],
+    \ ['darkgreen',   'RoyalBlue3'],
+    \ ['darkred',     'DarkOrchid3'],
+    \ ]
 
-" map space to create/open/close fold
-nnoremap <silent> <Space> @=(foldlevel('.')?'za':'l')<CR>
-vnoremap <Space> zf
+"au VimEnter * RainbowParenthesesToggle
+"au VimEnter * RainbowParenthesesLoadSquare
+"au VimEnter * RainbowParenthesesLoadBraces
 
-" changing dictionaries
-command! Fr setl spelllang=fr
-command! En setl spelllang=en_ca
-command! Sl setl spelllang=sl
+function! Config_Rainbow()
+    call rainbow_parentheses#load(0)
+    call rainbow_parentheses#load(1)
+    "call rainbow_parentheses#load(2)
+endfunction
 
-" bindings for building code
-nnoremap <F5>   :make<CR>
-nnoremap <S-F6> :!./"%"<CR>
+function! Load_Rainbow()
+    call rainbow_parentheses#activate()
+endfunction
 
-" PLUGINS {{{1
-" ----------------------------
+augroup TastetheRainbow
+    autocmd!
+    autocmd VimEnter,BufRead,BufWinEnter,BufNewFile * call Config_Rainbow()
+    autocmd VimEnter,BufRead,BufWinEnter,BufNewFile * call Load_Rainbow()
+augroup END
 
-" set vim to download files with curl
-let g:netrw_http_cmd  = "curl"
-let g:netrw_http_xcmd = "-so"
+autocmd FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
 
-" NERDTree config
-let g:NERDTreeChDirMode     = 2
-let g:NERDTreeIgnore        = ['\~$', '\.swp$', '\.o$', '\.hi$']
-let g:NERDTreeSortOrder     = ['^__\.py$', '\/$', '*', '\~$']
-let g:NERDTreeShowBookmarks = 1
-let g:NERDTreeMinimalUI     = 1
-nnoremap <silent> <F9> :NERDTreeToggle<CR>
+function! s:DiffWithSaved()
+  let filetype=&ft
+  diffthis
+  vnew | r # | normal! 1Gdd
+  diffthis
+  exe "setlocal bt=nofile bh=wipe nobl noswf ro ft=" . filetype
+endfunction
+com! DiffSaved call s:DiffWithSaved()
 
-" gundo config
-nnoremap <silent> <leader>u :GundoToggle<CR>
+map Y y$
 
-" fugative config
-nnoremap <leader>gg :copen<CR>:Ggrep 
-nnoremap <silent> <leader>gs :Gstatus<CR>
-nnoremap <silent> <leader>gd :Gdiff<CR>
-nnoremap <silent> <leader>ge :Gedit<CR>
-nnoremap <silent> <leader>gb :Gblame<CR>
-
-" ghc-mod config
-nnoremap <silent> <leader>hc :GhcModCheck<CR>
-nnoremap <silent> <leader>hl :GhcModLint<CR>
-
-" tagbar config
-nnoremap <silent> <leader>t :TagbarToggle<CR>
-
-" tabular config
-noremap <silent> <leader>a= :Tabular /=<CR>
-noremap <silent> <leader>a: :Tabular /[^:]\+:<CR>
-noremap <silent> <leader>a, :Tabular /[^,]\+,<CR>
-
-" youcompleteme config
-let g:ycm_global_ycm_extra_conf = '~/.vim/ycm/c_conf.py'
-nnoremap <silent> <leader>y :YcmDiag<CR>
-
-" pandoc config
-let g:pandoc_no_empty_implicits = 1
-let g:pandoc_no_folding         = 1
-let g:pandoc_use_hard_wraps     = 1
-
-" utilsnips config
-let g:UltiSnipsSnippetsDir         = "~/.vim/snippets"
-let g:UltiSnipsExpandTrigger       = "<c-j>"
-let g:UltiSnipsJumpForwardTrigger  = "<c-j>"
-let g:UltiSnipsJumpBackwardTrigger = "<c-k>"
-
-set statusline+=%#warningmsg#
-set statusline+=%{SyntasticStatuslineFlag()}
-set statusline+=%*
-
-let g:syntastic_always_populate_loc_list=1
-let g:syntastic_auto_loc_list=1
-let g:syntastic_check_on_open=1
-let g:syntastic_check_on_wq=0
-
-nnoremap <silent> <leader>cn :lnext<CR>
-nnoremap <silent> <leader>cp :lprev<CR>
+let g:syntastic_typescript_tsc_args = '--target ES5 --noImplicitAny'
