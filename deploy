@@ -45,13 +45,11 @@ df_htop()        { link htop/htoprc;                                     }
 df_lxdm()        { link lxdm/dmrc;                                       }
 df_mutt()        { link mutt;                                            }
 df_ncmpcpp()     { link ncmpcpp;                                         }
-df_openbox()     { link openbox .config/openbox;                         }
 df_pam()         { link pam/pam_environment;                             }
-df_ranger()      { link ranger .config/ranger;                           }
-df_makepkg()     { link makepkg/makepkg.conf;                            }
 df_mpd()         { link mpd/mpd.conf .config/mpd.conf;                   }
 df_systemd()     { link systemd .config/systemd;                         }
 df_termite()     { link termite .config/termite;                         }
+df_base16-shell() { link base16-shell .config/base16-shell;              }
 df_user-dirs()   { link user-dirs/user-dirs.dirs .config/user-dirs.dirs; }
 df_vimperator()  { link vimperator/vimperatorrc;                         }
 df_weechat()     { link weechat;                                         }
