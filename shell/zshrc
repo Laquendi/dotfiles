@@ -1,356 +1,156 @@
-autoload -U vcs_info
-autoload -U colors && colors
-autoload -U compinit && compinit
-autoload -U bashcompinit && bashcompinit
-autoload zsh/terminfo
+export HISTFILE=~/.histfile
+export HISTSIZE=50000
+export SAVEHIST=50000
 
-HISTFILE=$HOME/.zsh_history
-HISTSIZE=10000
-SAVEHIST=10000
-HISTIGNORE=' '
+setopt appendhistory
 
-# smart urls
-autoload -U url-quote-magic
-zle -N self-insert url-quote-magic
+export EDITOR="vim"
+export BROWSER='firefox'
 
-# changing directories
-setopt auto_cd \
-  auto_pushd \
-  cdable_vars \
-  chase_links \
-  pushd_ignore_dups \
-  pushd_silent \
-  pushd_to_home
+BASE16_SHELL="$HOME/.config/base16-shell/base16-default.dark.sh"
+[[ -s $BASE16_SHELL ]] && source $BASE16_SHELL
 
-# completion
-setopt always_to_end \
-  auto_menu \
-  auto_name_dirs \
-  auto_param_keys \
-  auto_param_slash \
-  auto_remove_slash \
-  complete_aliases \
-  complete_in_word \
-  list_ambiguous \
-  list_packed
-unsetopt menu_complete
+export LS_COLORS='no=00:di=34:tw=33;01:ow=33;01:ex=32:ln=36:fi=00:pi=00:so=00:bd=00:cd=00:or=00:mi=00:*.tgz=31:*.gz=31:*.zip=31:*.bz2=31:*.tar=31'
 
-# expansion and globbing
-setopt brace_ccl \
-  extended_glob \
-  long_list_jobs \
-  multios \
-  prompt_subst
+zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
 
-# input/output
-setopt correct \
-  interactive_comments \
-  rc_quotes \
-  short_loops
-unsetopt flowcontrol
+zstyle ':completion:*:*:kill:*' menu yes select
+zstyle ':completion:*:kill:*' force-list always
+zstyle ':completion:*:processes' command 'ps -aeu'
+zstyle ':completion:*:processes-names' command 'ps -e o cmd|tail -n +2'
 
-# job control
-setopt bg_nice
+zstyle ':completion:*' completer _expand _complete _correct _approximate _ignored
 
-# zle
-unsetopt beep
+zstyle ':completion:*' max-errors 1
 
-# prompt
-setopt prompt_subst
+zstyle ':completion:*' matcher-list  'm:{a-zA-Z}={A-Za-z}'
 
-#history
-setopt append_history \
-  extended_history \
-  hist_expire_dups_first \
-  hist_ignore_dups \
-  hist_ignore_space \
-  hist_verify \
-  inc_append_history \
-  share_history
+zstyle ':completion:*' ignore-parents pwd
 
-export SUDO_PROMPT=$'\e[31mSUDO\e[m password for \e[34m%p\e[m: '
-export LESS_TERMCAP_mb=$'\e[01;31m' # begin blinking
-export LESS_TERMCAP_md=$'\e[01;31m' # begin bold
-export LESS_TERMCAP_me=$'\e[0m' # end mode
-export LESS_TERMCAP_so=$'\e[01;36m' # begin standout-mode
-export LESS_TERMCAP_se=$'\e[0m' # end standout-mode
-export LESS_TERMCAP_us=$'\e[00;36m' # begin underline
-export LESS_TERMCAP_ue=$'\e[0m' # end underline
+zstyle ':completion:*:ssh:*' menu select
 
-[[ -f ~/.dircolors ]] && \
-  source <(dircolors ~/.dircolors)
+zstyle ':completion:*' menu select
+zstyle ':completion:*' select-prompt %m %p %s
 
-# Arc bash completion
-source ~/.local/share/webapps/arcanist/resources/shell/bash-completion
+zstyle ':completion:*:descriptions' format '%U%B%d%b%u'
+zstyle ':completion:*:warnings' format '%BSorry, no matches :('
 
-# {{{1 TERM
-[[ $TERM == xterm ]] && export TERM=xterm-256color
-case $TERM in
-  termite|vte*|xterm*|rxvt*)
+fpath=(~/.zsh/completion $fpath) 
+autoload -Uz compinit
+compinit
+setopt correct
 
-    function precmd {
-      print -Pn '\e];%n@%m %~\a'
-    }
+setopt hist_ignore_all_dups
 
-    function preexec {
-      local cmd=${1[(wr)^(*=*|sudo|ssh|-*)]}
-      print -Pn "\e];$cmd:q\a"
-    }
+bindkey '^[[7~' beginning-of-line
+bindkey '^[[8~' end-of-line
+bindkey '^[[3~' delete-char
+bindkey '^[[5~' up-history
+bindkey '^[[6~' down-history
 
-    ;;
-esac
-# }}}
+#terminaali
+bindkey '^[[1~' beginning-of-line
+bindkey '^[[4~' end-of-line
 
-# {{{1 ALIAS
-alias ls='ls -FNh --tabsize=0 --color=auto --show-control-chars --group-directories-first'
-alias ll='ls -l'
-alias la='ls -a'
-alias lla='ls -la'
-alias tree='tree -C'
-alias grep='grep --color=auto'
-# }}}
+bindkey '^[OH' beginning-of-line
+bindkey '^[OF' end-of-line
 
-# {{{1 FUNCTIONS
-# bg on empty line, push-input on non-empty line
-function fancy-ctrl-z {
-  if [[ $#BUFFER -eq 0 ]]; then
-    bg
-    zle redisplay
-  else
-    zle push-input
-  fi
-};
 
-function zle-line-init zle-keymap-select {
-  vimode="${${KEYMAP/vicmd/c}/(main|viins)/i}"
-  zle reset-prompt
-}
+alias ls="ls --color=auto"
+alias bc="bc -l"
+alias cal="cal -m3"
+alias pdf="epdfview"
+alias youtube="youtube-dl --no-playlist"
 
-zle -N fancy-ctrl-z
-zle -N zle-line-init
-zle -N zle-keymap-select
-# }}}
+export PATH=~/.cabal/bin:$PATH
+export PATH=.cabal-sandbox/bin:$PATH
+export PATH=~/cabal-bins/yesod-bin/.cabal-sandbox/bin:$PATH
+export PATH=~/cabal-bins/happy/.cabal-sandbox/bin:$PATH
+export PATH=~/cabal-bins/alex/.cabal-sandbox/bin:$PATH
+export PATH=~/cabal-bins/c2hs/.cabal-sandbox/bin:$PATH
+export PATH=~/cabal-bins/ghc-mod/.cabal-sandbox/bin:$PATH
+export PATH=~/cabal-bins/hdevtools/.cabal-sandbox/bin:$PATH
+export PATH=~/cabal-bins/ghc-core/.cabal-sandbox/bin:$PATH
+export PATH=$PATH:/usr/local/sbin/:~/bin
+export PATH=$PATH:/usr/bin/
+export PATH=$PATH:~/bin/
+export PATH=$PATH:~/.gem/ruby/2.1.0/bin/
+export PATH=$PATH:~/.local/bin
 
-# {{{1 KEYMAPPING
-# make zsh/terminfo work for terms with application and cursor modes
-case "$TERM" in
-  vte*|xterm*)
-    zle-line-init()   { zle-keymap-select; echoti smkx }
-    zle-line-finish() { echoti rmkx }
-    zle -N zle-line-init
-    zle -N zle-line-finish
-    ;;
-esac
+export PYTHONPATH=$PYTHONPATH:~/.local
 
-# vi editing mode
+autoload colors zsh/terminfo
+if [[ "$terminfo[colors]" -ge 8 ]]; then
+    colors
+fi
+for color in RED GREEN YELLOW BLUE MAGENTA CYAN WHITE; do
+    eval PR_$color='%{$terminfo[bold]$fg[${(L)color}]%}'
+    eval PR_LIGHT_$color='%{$fg[${(L)color}]%}'
+    (( count = $count + 1 ))
+done
+
+PR_NO_COLOUR="%{$terminfo[sgr0]%}"
+if [[ "$USERNAME" = "root" ]]; then PR_USERCOLOR=$PR_RED; else PR_USERCOLOR=$PR_GREEN; fi
+
+if [[ -z $SSH_CONNECTION ]]; then PR_HOSTCOLOR=$PR_GREEN; else PR_HOSTCOLOR=$PR_RED; fi
+
+PS1=''$PR_CYAN'['$PR_USERCOLOR'%n'$PR_YELLOW'@'$PR_HOSTCOLOR'%M'$PR_CYAN'] '$PR_GREEN'('$PR_BLUE'%?'$PR_GREEN') '$PR_GREEN'%~ '$PR_LIGHT_CYAN'$'$PR_NO_COLOUR' '
+
+alias ja_lc='export LANG="ja_JP.UTF-8"; export LC_ALL="ja_JP.UTF-8"'
+alias kr_lc='export LANG="ko_KR.UTF-8"; export LC_ALL="ko_KR.UTF-8"'
+
+stty stop ''
+stty start ''
+stty -ixon
+stty -ixoff
+
 bindkey -v
 
-# shift-tab
-if [[ -n $terminfo[kcbt] ]]; then
-  bindkey "$terminfo[kcbt]" reverse-menu-complete
-fi
+bindkey '^P' up-history
+bindkey '^N' down-history
+bindkey '^?' backward-delete-char
+bindkey '^h' backward-delete-char
+bindkey '^w' backward-kill-word
+bindkey '^r' history-incremental-search-backward
 
-# do history expansion on space
-bindkey ' ' magic-space
-
-# delete
-if [[ -n $terminfo[kdch1] ]]; then
-  bindkey "$terminfo[kdch1]" delete-char
-  bindkey -M vicmd "$terminfo[kdch1]" vi-delete-char
-fi
-
-# insert
-if [[ -n $terminfo[kich1] ]]; then
-  bindkey "$terminfo[kich1]" overwrite-mode
-  bindkey -M vicmd "$terminfo[kich1]" vi-insert
-fi
-
-# home
-if [[ -n $terminfo[khome] ]]; then
-  bindkey "$terminfo[khome]" vi-beginning-of-line
-  bindkey -M vicmd "$terminfo[khome]" vi-beginning-of-line
-fi
-
-# end
-if [[ -n $terminfo[kend] ]]; then
-  bindkey "$terminfo[kend]" vi-end-of-line
-  bindkey -M vicmd "$terminfo[kend]" vi-end-of-line
-fi
-
-# backspace (and <C-h>)
-if [[ -n $terminfo[kbs] ]]; then
-  bindkey "$terminfo[kbs]" backward-delete-char
-  bindkey -M vicmd "$terminfo[kbs]" backward-char
-fi
-
-bindkey '^H' backward-delete-char
-bindkey -M vicmd '^H' backward-char
-
-# page up (and <C-b> in vicmd)
-if [[ -n $terminfo[kpp] ]]; then
-  bindkey "$terminfo[kpp]" beginning-of-buffer-or-history
-  bindkey -M vicmd "$terminfo[kpp]" beginning-of-buffer-or-history
-fi
-
-bindkey -M vicmd '^B' beginning-of-buffer-or-history
-
-# page down (and <C-f> in vicmd)
-if [[ -n $terminfo[knp] ]]; then
-  bindkey "$terminfo[knp]" end-of-buffer-or-history
-  bindkey -M vicmd "$terminfo[knp]" end-of-buffer-or-history
-fi
-
-bindkey -M vicmd '^F' end-of-buffer-or-history
-
-# up arrow (history search)
-if [[ -n $terminfo[kcuu1] ]]; then
-  bindkey "$terminfo[kcuu1]" history-beginning-search-backward
-  bindkey -M vicmd "$terminfo[kcuu1]" history-beginning-search-backward
-fi
-
-bindkey '^[[A' history-beginning-search-backward
-
-# down arrow (history search)
-if [[ -n $terminfo[kcud1] ]]; then
-  bindkey "$terminfo[kcud1]" history-beginning-search-forward
-  bindkey -M vicmd "$terminfo[kcud1]" history-beginning-search-forward
-fi
-
-bindkey '^[[B' history-beginning-search-forward
-
-# left arrow (whichwrap)
-if [[ -n $terminfo[kcub1] ]]; then
-  bindkey "$terminfo[kcub1]" backward-char
-  bindkey -M vicmd "$terminfo[kcub1]" backward-char
-fi
-
-# right arrow (whichwrap)
-if [[ -n $terminfo[kcuf1] ]]; then
-  bindkey "$terminfo[kcuf1]" forward-char
-  bindkey -M vicmd "$terminfo[kcuf1]" forward-char
-fi
-
-# shift-left
-if [[ -n $terminfo[kLFT] ]]; then
-  bindkey "$terminfo[kLFT]" vi-backward-word
-  bindkey -M vicmd "$terminfo[kLFT]" vi-backward-word
-fi
-
-# shift-right
-if [[ -n $terminfo[kRIT] ]]; then
-  bindkey "$terminfo[kRIT]" vi-forward-word
-  bindkey -M vicmd "$terminfo[kRIT]" vi-forward-word
-fi
-
-# ctrl-left
-bindkey '^[[1;5D' vi-backward-blank-word
-bindkey '^[[1;5C' vi-forward-blank-word
-bindkey '^i' expand-or-complete-prefix
-bindkey '^W' backward-kill-word
-
-bindkey -M vicmd 'h' backward-char
-bindkey -M vicmd 'l' forward-char
-bindkey -M vicmd '^R' redo
-bindkey -M vicmd 'u' undo
-bindkey -M vicmd 'ga' what-cursor-position
-bindkey -M vicmd 'v' edit-command-line
-
-# fancy <C-z>
-bindkey '^Z' fancy-ctrl-z
-bindkey -M vicmd '^Z' fancy-ctrl-z
-
-# buffer stack access
-bindkey '^w' push-line
-bindkey '^e' get-line
-# }}}
-
-# {{{1 ZSTYLE
-_force_rehash() {
-  (( CURRENT = 1 )) && rehash
-  return 1
+function zle-line-init zle-keymap-select {
+    VIM_PROMPT="%{$fg_bold[yellow]%} [% NORMAL]%  %{$reset_color%}"
+    RPS1="${${KEYMAP/vicmd/$VIM_PROMPT}/(main|viins)/} $EPS1"
+    zle reset-prompt
 }
 
-zstyle ':completion::complete:*' use-cache on
+zle -N zle-line-init
+zle -N zle-keymap-select
+export KEYTIMEOUT=1
 
-# Group matches and describe.
-zstyle ':completion:*:*:*:*:*' menu yes select
-zstyle ':completion:*:matches' group 'yes'
-zstyle ':completion:*:options' description 'yes'
-zstyle ':completion:*:options' auto-description '%d'
-zstyle ':completion:*:corrections' format '%B%F{green}>> %d (errors: %e)%f%b'
-zstyle ':completion:*:descriptions' format '%B%F{magenta}>> %d%f%b'
-zstyle ':completion:*:messages' format '%B%F{cyan}>> %d%f%b'
-zstyle ':completion:*:warnings' format '%B%F{red}>> no matches found%f%b'
-zstyle ':completion:*:default' list-prompt '%B%S%M matches%s%b'
-zstyle ':completion:*' format '%B%F{cyan}>> %d%f%b'
-zstyle ':completion:*' group-name ''
-zstyle ':completion:*' verbose yes
+export ncpus=8
 
-zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}' 'r:|[._-]=* r:|=*' 'l:|=* r:|=*'
-zstyle ':completion:*' list-colors ''
-zstyle ':completion:*' completer _oldlist _expand _force_rehash _complete _match _approximate
-zstyle ':completion:*' menu select=2
+export PGDATA=/usr/lib/pgsql/data
+export LD_LIBRARY_PATH=/usr/lib/nvidia:/usr/lib32/nvidia:$LD_LIBRARY_PATH
 
-zstyle ':completion:*:functions' ignored-patterns '_*'
-zstyle ':completion:*:match:*' original only
-zstyle ':completion:*:approximate:*' max-errors 1 numeric
+if [[ -n $RUN_IRC ]] then
+	ssh evo
+fi
 
-zstyle ':completion:*:*:*:users' ignored-patterns \
-                                           bin daemon mail ftp http nobody dbus avahi named git bitlbee mpd \
-                                           rtkit ntp usbmux gdm
+if [[ -n $RUN_RTORRENT ]] then
+	cd /media/disk/anime && rtorrent
+fi
 
-# COMMANDS {{{2
-zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"
-zstyle ':completion:*:*:cd:*' tag-order local-directories directory-stack path-directories
-zstyle ':completion:*:-tilde-:*' group-order 'named-directories' 'path-directories' 'users' 'expand'
-zstyle ':completion:*' squeeze-slashes true
+if [[ -n $RUN_GIZLO ]] then
+	cd ~/src/gizlo
+fi
+if [[ -n $RUN_GIZLO_DASHBOARD ]] then
+	cd ~/gizlo-backend
+fi
 
-# vim zstyle
-zstyle ':completion:*:*:(vim|gvim):*:*files' ignored-patterns '*~|*.(old|bak|o|hi)'
-zstyle ':completion:*:*:(vim|gvim):*:*files' file-sort modification
-zstyle ':completion:*:*:(vim|gvim):*' file-sort modification
-zstyle ':completion:*:*:(vim|gvim):*' tag-order files
+if [[ -n $RUN_POSTGRES ]] then
+	sudo su postgres
+fi
 
-# kill zstyle
-zstyle ':completion:*:*:kill:*' command 'ps -e -o pid,%cpu,tty,cputime,cmd'
-zstyle ':completion:*:*:kill:*:processes' list-colors '=(#b) #([0-9]#) ([0-9a-z-]#)*=01;34=0=01'
-zstyle ':completion:*:*:kill:*' insert-ids single
+alias monstercat="livestreamer 'http://www.twitch.tv/monstercat' best"
 
-# man
-zstyle ':completion:*:manuals' separate-sections true
-zstyle ':completion:*:manuals.(^1*)' insert-sections true
+alias hyster="livestreamer 'rtmp://zergling.dy.fi/live/hyster live=1 swfVfy=http://zergling.dy.fi/jwplayer/player.swf' best"
+alias yuizy="livestreamer 'rtmp://zergling.dy.fi/live/yuizy live=1 swfVfy=http://zergling.dy.fi/jwplayer/player.swf' best"
 
-# ssh/scp/rsync
-zstyle ':completion:*:(scp|rsync):*' tag-order 'hosts:-host hosts:-domain:domain hosts:-ipaddr:ip\ address *'
-zstyle ':completion:*:(scp|rsync):*' group-order files all-files hosts-domain hosts-host hosts-ipaddr
-zstyle ':completion:*:ssh:*' tag-order 'hosts:-host hosts:-domain:domain hosts:-ipaddr:ip\ address *'
-zstyle ':completion:*:ssh:*' group-order hosts-domain hosts-host users hosts-ipaddr
-zstyle ':completion:*:(ssh|scp|rsync):*:hosts-host' ignored-patterns '*.*' loopback localhost
-zstyle ':completion:*:(ssh|scp|rsync):*:hosts-domain' ignored-patterns '<->.<->.<->.<->' '^*.*' '*@*'
-zstyle ':completion:*:(ssh|scp|rsync):*:hosts-ipaddr' ignored-patterns '^<->.<->.<->.<->' '127.0.0.<->'
-# }}}
-
-# VCS {{{2
-zstyle ':vcs_info:*' enable git cvs svn
-zstyle ':vcs_info:*' actionformats '%F{5}(%f%s%F{5})%F{3}-%F{5}[%F{2}%b%F{3}|%F{1}%a%F{5}]%f '
-zstyle ':vcs_info:*' formats '%F{5}(%f%s%F{5})%F{3}-%F{5}[%F{2}%b%F{5}]%f '
-zstyle ':vcs_info:(sv[nk]|bzr):*' branchformat '%b%F{1}:%F{3}%r'
-# }}}1
-
-function vcs_info_wrapper {
-  vcs_info
-  [[ -n "$vcs_info_msg_0_" ]] && echo " %{$fg[grey]%}${vcs_info_msg_0_/ /}%{$reset_color%}"
-}
-
-PROMPT="%{$fg[red]%}%n%{$reset_color%}@%{$fg[blue]%}%m %{$fg[yellow]%}%1~%{$reset_color%}"'$(vcs_info_wrapper) $ '
-
-# Python :D
-venv() {
-  local activate=~/.python/$1/bin/activate
-  if [ -e "$activate" ] ; then
-    source "$activate"
-  else
-    echo "Error: Not found: $activate"
-  fi
-}
-venv27() { venv 27 ; }
+export NVM_DIR="/home/santtu/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
