@@ -210,7 +210,7 @@ myKeys ws browser conf = mkKeymap conf $
     <> searchKeys
   where
     skip     = skipWS [ "NSP" ]
-    scrotDir = "/home/simongmzlj/pictures/screenshots/%Y-%m-%d_%H:%M:%S_$wx$h.png"
+    scrotDir = "/home/santtu/screenshots/%Y-%m-%d_%H:%M:%S_$wx$h.png"
 
 wsSwitchKeys tags = namedTags <> moreTags -- <> screens
   where

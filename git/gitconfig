@@ -1,6 +1,6 @@
 [user]
-	name = Simon Gomizelj
-	email = simongmzlj@gmail.com
+	name = Santtu Keskinen
+	email = santtu.keskinen@gmail.com
 [code]
 	editor = vim
 [color]
@@ -39,7 +39,7 @@
 	smtpserver = /usr/bin/msmtp
 	smtpserverport = 587
 	smtpencryption = tls
-	smtpuser = simongmzlj@gmail.com
+	smtpuser = santtu.keskinen@gmail.com
 	confirm = auto
 
 # vim: set ft=gitconfig noet:

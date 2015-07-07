@@ -1,5 +1,0 @@
-Color = auto
-IgnoreRepo = vodik
-TargetDir = ~/build/aur
-
-# vim: set noet syn=conf

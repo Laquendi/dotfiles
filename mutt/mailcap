@@ -1,3 +1,0 @@
-text/x-diff;  cat %s | colordiff; copiousoutput
-text/x-patch; cat %s | colordiff; copiousoutput
-text/html; elinks -dump %s; copiousoutput;
