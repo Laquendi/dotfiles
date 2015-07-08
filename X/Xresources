@@ -1,58 +1,24 @@
-! file:     ~/.Xdefaults
-! author:   Simon Gomizelj
-! vim:      ft=xdefaults
-! ----------------------------------------------------------------------------
+Rxvt*font:      xft:Mensch:pixelsize=12:antialias=true,xft:IPAGothic,xft:Baekmuk Dotum:pixelsize=14,xft:WenQuanYi Micro Hei Mono
+Rxvt*scrollBar: false
 
-Xft*dpi:       88
-Xft*antialias: true
-Xft*rgba:      vrgb
+URxvt*inputMethod:SCIM 
+URxvt.imLocale:       ja_JP.UTF-8
+URxvt*shading: 10
 
-URxvt*font:              xft:Envy Code R:size=9
-URxvt*buffered:          true
-URxvt*scrollBar:         false
-URxvt*loginShell:        true
-URxvt*saveLines:         262144
-URxvt*boldMode:          true
-URxvt*jumpScroll:        true
-URxvt*scrollTtyKeypress: true
-URxvt*scrollWithBuffer:  false
-URxvt*scrollTtyOutput:   false
-URxvt*urgentOnBell:      true
-URxvt*secondaryWheel:    true
-URxvt*cursorBlink:       false
-URxvt*cursorColor:       #ff9900
-URxvt*cursorColor2:      #000000
-URxvt*depth:             32
-URxvt*background:        rgba:1111/1111/1111/aaaa
+URxvt.perl-ext-common:      default,clipboard,url-select,keyboard-select,matcher
+URxvt.url-select.launcher:  firefox
+URxvt.url-select.underline: true
+URvxt.url-select.button:    3
+URxvt.keysym.M-u:           perl:url-select:select_next
+URxvt.keysym.M-Escape:      perl:keyboard-select:activate
+URxvt.keysym.M-s:           perl:keyboard-select:search
 
-URxvt*perl-ext-common:   default,matcher
-URxvt*urlLauncher:       /usr/bin/firefox
-URxvt*matcher.button:    1
-
-*foreground: #ddccbb
-*background: #151515
-
-!black
-*color0:     #3b3d3e
-*color8:     #505354
-!red
-*color1:     #f92672
-*color9:     #ff5995
-!green
-*color2:     #82b414
-*color10:    #b6e354
-!yellow
-*color3:     #fd971f
-*color11:    #feed6c
-!blue
-*color4:     #56c2d6
-*color12:    #8cedff
-!magenta
-*color5:     #8c54fe
-*color13:    #9e6ffe
-!cyan
-*color6:     #6664a7
-*color14:    #888cb1
-!white
-*color7:     #ccccc6
-*color15:    #f8f8f2
+!-------------------------------------------------------------------------------
+! Xft settings
+!-------------------------------------------------------------------------------
+ 
+Xft.dpi:                    108
+!Xft.antialias:              false
+Xft.rgba:                   rgb
+Xft.hinting:                true
+Xft.hintstyle:              hintslight
