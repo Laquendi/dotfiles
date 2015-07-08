@@ -27,3 +27,5 @@ weechat/ssl/*
 xmonad/xmonad-*-linux
 xmonad/xmonad.errors
 xmonad/history
+vim/bundle/*
+!vim/bundle/neobundle.vim
