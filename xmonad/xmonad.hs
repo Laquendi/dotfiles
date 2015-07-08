@@ -20,7 +20,7 @@ import XMonad.Layout.NoBorders
 import XMonad.Actions.CopyWindow
 import XMonad.SpawnOn
 
-myTerminal      = "urxvt"
+myTerminal      = "termite"
  
 myFocusFollowsMouse :: Bool
 myFocusFollowsMouse = True
@@ -53,11 +53,11 @@ myKeys conf = M.fromList $
   , ((modm  , xK_Delete ), kill )
   , ((modm  , xK_b ), kill )
   , ((modm  , xK_r ), shellPrompt defaultXPConfig )
-  , ((modm             , xK_z ), scratchpadSpawnActionTerminal "urxvt" )
+  , ((modm             , xK_z ), scratchpadSpawnActionTerminal myTerminal)
   , ((modm  , xK_y ), broadcastMessage ReleaseResources >> restart "xmonad" True)
 
-  , ((modm  , xK_F1), spawn "setxkbmap dvorak; xmodmap ~/layouts/dvorak; xmodmap ~/.Xmodmap")
-  , ((modm  , xK_F2), spawn "setxkbmap fi; xmodmap ~/.Xmodmap")
+  , ((modm  , xK_F1), spawn "setxkbmap dvorak; modmap ~/.Xmodmap")
+  , ((modm  , xK_F2), spawn "setxkbmap fi")
 
   , ((modm  , xK_F4), spawn "trackpad-toggle.sh")
   ]
@@ -134,11 +134,8 @@ myStartupHook = do
         spawnOn "3" "urxvt -e env RUN_IRC=1 zsh -i"
         spawnOn "20" "urxvt -e env RUN_RTORRENT=1 zsh -i"
  
-main = xmonad =<< xmobar myConfig
+main = xmonad =<< xmobar defaults
 
-myConfig = defaultConfig
-
- 
 defaults = defaultConfig {
       -- simple stuff
         terminal           = myTerminal,
