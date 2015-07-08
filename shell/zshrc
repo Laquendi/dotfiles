@@ -66,17 +66,9 @@ alias youtube="youtube-dl --no-playlist"
 
 export PATH=~/.cabal/bin:$PATH
 export PATH=.cabal-sandbox/bin:$PATH
-export PATH=~/cabal-bins/yesod-bin/.cabal-sandbox/bin:$PATH
-export PATH=~/cabal-bins/happy/.cabal-sandbox/bin:$PATH
-export PATH=~/cabal-bins/alex/.cabal-sandbox/bin:$PATH
-export PATH=~/cabal-bins/c2hs/.cabal-sandbox/bin:$PATH
-export PATH=~/cabal-bins/ghc-mod/.cabal-sandbox/bin:$PATH
-export PATH=~/cabal-bins/hdevtools/.cabal-sandbox/bin:$PATH
-export PATH=~/cabal-bins/ghc-core/.cabal-sandbox/bin:$PATH
 export PATH=$PATH:/usr/local/sbin/:~/bin
 export PATH=$PATH:/usr/bin/
 export PATH=$PATH:~/bin/
-export PATH=$PATH:~/.gem/ruby/2.1.0/bin/
 export PATH=$PATH:~/.local/bin
 
 export PYTHONPATH=$PYTHONPATH:~/.local
