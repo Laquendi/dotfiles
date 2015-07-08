@@ -62,6 +62,8 @@ set background=dark
 let base16colorspace=256
 colorscheme base16-default
 
+hi Normal ctermbg=none
+
 set nowrap
 set nu
 set history=1000
