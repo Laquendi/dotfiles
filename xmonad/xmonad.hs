@@ -32,12 +32,33 @@ modm       = mod4Mask
  
 myWorkspaces = map show [1..22]
  
-myNormalBorderColor = "#111137"
-myFocusedBorderColor = "#FF1155"
+xftFont = "xft:Mensch:size=10"
+colorBlack="#181818"
+colorRed="#ab4642"
+colorGreen="#a1b56c"
+colorYellow="#f7ca88"
+colorBlue="#7cafc2"
+colorMagenta="#ba8baf"
+colorCyan="#86c1b9"
+colorWhite="#d8d8d8"
+colorGray="#585858"
+
+myNormalBorderColor = colorGray
+myFocusedBorderColor = colorRed
 
 myWorkspaceKeys = [(k, m) | m <- masks, k <- keys]
     where masks = [0, controlMask]
           keys = [xK_1, xK_2, xK_3, xK_4, xK_apostrophe, xK_comma, xK_period, xK_p, xK_a, xK_o, xK_e] 
+
+myXPConfig = defaultXPConfig
+    { font              = xftFont
+    , fgColor           = colorBlue
+    , bgColor           = colorBlack
+    , bgHLight          = colorBlack
+    , fgHLight          = colorRed
+    , promptBorderWidth = 0
+    , position          = Bottom
+    }
 
 myKeys conf = M.fromList $
   [ ((modm  , xK_d ), spawn $ terminal conf )
@@ -52,7 +73,7 @@ myKeys conf = M.fromList $
   , ((modm  , xK_q ), sendMessage (IncMasterN 1))
   , ((modm  , xK_Delete ), kill )
   , ((modm  , xK_b ), kill )
-  , ((modm  , xK_r ), shellPrompt defaultXPConfig )
+  , ((modm  , xK_r ), shellPrompt myXPConfig )
   , ((modm             , xK_z ), scratchpadSpawnActionTerminal myTerminal)
   , ((modm  , xK_y ), broadcastMessage ReleaseResources >> restart "xmonad" True)
 
