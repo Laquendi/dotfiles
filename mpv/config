@@ -1,0 +1,8 @@
+# Write your default config options here!
+osc=no
+vo=xv,vdpau,opengl
+hwdec=auto
+alang=jpn,kor
+autofit=28%
+no-audio-display
+

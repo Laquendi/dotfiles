@@ -1,0 +1,578 @@
+#compdef mpv
+
+# mpv zsh completion
+
+local curcontext="$curcontext" state state_descr line
+typeset -A opt_args
+
+local rc=1
+
+_arguments -C -S \
+  '--write-filename-in-watch-later-=-:Flag (default\: no):' \
+  '--demuxer-lavf-analyzeduration=-:Float (0 to 3600) (default\: 0.000000):' \
+  '--demuxer-mkv-subtitle-preroll=-:Flag (default\: no):' \
+  '--demuxer-lavf-allow-mimetype=-:Flag (default\: yes):' \
+  '--screenshot-jpeg-progressive=-:Flag (default\: no):' \
+  '--ass-vsfilter-aspect-compat=-:Flag (default\: yes):' \
+  '--demuxer-rawvideo-mp-format=-:Image format:' \
+  '--screenshot-png-compression=-:Integer (0 to 9) (default\: 7):' \
+  '--ass-vsfilter-color-compat=-:Choices\: no basic full force-601 (default\: basic):' \
+  '--demuxer-rawaudio-channels=-:Audio channels or channel map (1 to any):' \
+  '--demuxer-readahead-packets=-:Integer (0 to 16000) (default\: 0):' \
+  '--ass-vsfilter-blur-compat=-:Flag (default\: yes):' \
+  '--colormatrix-output-range=-:Choices\: auto limited full (default\: auto):' \
+  '--demuxer-lavf-genpts-mode=-:Choices\: lavf no (default\: no):' \
+  '--force-rgba-osd-rendering=-:Flag (default\: no):' \
+  '--screenshot-jpeg-baseline=-:Flag (default\: yes):' \
+  '--screenshot-jpeg-optimize=-:Integer (0 to 100) (default\: 100):' \
+  '--vd-lavc-check-hw-profile=-:Flag (default\: yes):' \
+  '--chapter-merge-threshold=-:Integer (0 to 10000) (default\: 100):' \
+  '--colormatrix-input-range=-:Choices\: auto limited full (default\: auto):' \
+  '--cursor-autohide-fs-only=-:Flag (default\: no):' \
+  '--demuxer-lavf-buffersize=-:Integer (1 to 10485760) (default\: 32768):' \
+  '--demuxer-lavf-probescore=-:Integer (0 to 100) (default\: 0):' \
+  '--demuxer-rawaudio-format=-:Choices\: u8 s8 u16le u16be s16le u16be u24le u24be s24le s24be u32le u32be s32le s32be floatle floatbe doublele doublebe u16 s16 u24 s24 u32 s32 float double (default\: s16le):' \
+  '--demuxer-rawvideo-format=-:FourCC:' \
+  '--demuxer-readahead-bytes=-:Integer (0 to 419430400) (default\: 0):' \
+  '--screenshot-jpeg-quality=-:Integer (0 to 100) (default\: 90):' \
+  '--chapter-seek-threshold=-:Double (default\: 5.000000):' \
+  '--demuxer-lavf-cryptokey=-:String (default\: ):' \
+  '--demuxer-lavf-probesize=-:Integer (32 to 2147483647) (default\: 0):' \
+  '--demuxer-rawvideo-codec=-:String (default\: ):' \
+  '--demuxer-readahead-secs=-:Double (0 to any) (default\: 0.200000):' \
+  '--hr-seek-demuxer-offset=-:Float (-9 to 99) (default\: 0.000000):' \
+  '--input-default-bindings=-:Flag (default\: yes) [global]:' \
+  '--input-doubleclick-time=-:Integer (0 to 1000) (default\: 300):' \
+  '--ordered-chapters-files=-:String (default\: ) [file]:->files' \
+  '--screenshot-jpeg-smooth=-:Integer (0 to 100) (default\: 0):' \
+  '--sub-text-shadow-offset=-:Float (0 to 10) (default\: 0.000000):' \
+  '--vd-lavc-skiploopfilter=-:Choices\: none default nonref bidir nonkey all (default\: default):' \
+  '--colormatrix-primaries=-:Choices\: auto BT.601-525 BT.601-625 BT.709 BT.2020 (default\: auto):' \
+  '--demuxer-rawaudio-rate=-:Integer (1000 to 384000) (default\: 44100):' \
+  '--demuxer-rawvideo-size=-:Integer (1 to 268435456) (default\: 0):' \
+  '--force-window-position=-:Flag (default\: no):' \
+  '--load-unsafe-playlists=-:Flag (default\: no):' \
+  '--save-position-on-quit=-:Flag (default\: no):' \
+  '--screenshot-png-filter=-:Integer (0 to 5) (default\: 5):' \
+  '--sub-scale-with-window=-:Flag (default\: no):' \
+  '--sub-text-border-color=-:Color:' \
+  '--sub-text-shadow-color=-:Color:' \
+  '--demuxer-rawvideo-fps=-:Float (0.001 to 1000) (default\: 25.000000):' \
+  '--mkv-subtitle-preroll=-:Flag (default\: no):' \
+  '--pts-association-mode=-:Choices\: auto decoder sort (default\: decoder):' \
+  '--quvi-fetch-subtitles=-:Flag (default\: no):' \
+  '--sub-text-border-size=-:Float (0 to 10) (default\: 2.500000):' \
+  '--demuxer-lavf-format=-:String (default\: ):' \
+  '--input-key-fifo-size=-:Integer (2 to 65000) (default\: 7) [global]:' \
+  '--osd-scale-by-window=-:Flag (default\: yes):' \
+  '--screenshot-jpeg-dpi=-:Integer (1 to 99999) (default\: 72):' \
+  '--screenshot-template=-:String (default\: ):' \
+  '--sub-text-back-color=-:Color:' \
+  '--volume-restore-data=-:String (default\: ):' \
+  '--ass-style-override=-:Choices\: no yes force signfs (default\: yes):' \
+  '--demuxer-rawvideo-h=-:Integer (1 to 8192) (default\: 720):' \
+  '--demuxer-rawvideo-w=-:Integer (1 to 8192) (default\: 1280):' \
+  '--heartbeat-interval=-:Float (0 to any) (default\: 30.000000):' \
+  '--http-header-fields=-:String list (default\: ):' \
+  '--initial-audio-sync=-:Flag (default\: yes):' \
+  '--input-right-alt-gr=-:Flag (default\: yes) [global]:' \
+  '--input-x11-keyboard=-:Flag (default\: yes) [global]:' \
+  '--monitorpixelaspect=-:Float (0.2 to 9) (default\: 1.000000):' \
+  '--reset-on-next-file=-:String list (default\: ) [global]:' \
+  '--sub-text-font-size=-:Float (1 to 9000) (default\: 45.000000):' \
+  '--term-osd-bar-chars=-:String (default\: [-+-]):' \
+  '--hr-seek-framedrop=-:Flag (default\: yes):' \
+  '--osd-shadow-offset=-:Float (0 to 10) (default\: 0.000000):' \
+  '--screenshot-format=-:String (default\: jpg):' \
+  '--sub-clear-on-seek=-:Flag (default\: no):' \
+  '--sub-text-margin-x=-:Integer (0 to 300) (default\: 25):' \
+  '--sub-text-margin-y=-:Integer (0 to 600) (default\: 10):' \
+  '--tv-scan-autostart=-:Flag (default\: no):' \
+  '--tv-scan-threshold=-:Integer (1 to 100) (default\: 50):' \
+  '--vd-lavc-framedrop=-:Choices\: none default nonref bidir nonkey all (default\: nonref):' \
+  '--vd-lavc-skipframe=-:Choices\: none default nonref bidir nonkey all (default\: default):' \
+  '--video-stereo-mode=-:Stereo 3D mode (default\: mono):' \
+  '--ass-line-spacing=-:Float (-1000 to 1000) (default\: 0.000000):' \
+  '--audio-samplerate=-:Integer (1000 to 384000) (default\: 0):' \
+  '--cdda-sector-size=-:Integer (1 to 100) (default\: 0):' \
+  '--native-keyrepeat=-:Flag (default\: no):' \
+  '--ordered-chapters=-:Flag (default\: yes):' \
+  '--osd-border-color=-:Color:' \
+  '--osd-shadow-color=-:Color:' \
+  '--stop-screensaver=-:Flag (default\: yes):' \
+  '--stretch-dvd-subs=-:Flag (default\: no):' \
+  '--sub-text-spacing=-:Float (-10 to 10) (default\: 0.000000):' \
+  '--term-playing-msg=-:String (default\: ):' \
+  '--tv-immediatemode=-:Flag (default\: yes):' \
+  '--use-filedir-conf=-:Flag (default\: no) [global]:' \
+  '--vd-lavc-bitexact=-:Flag (default\: no):' \
+  '--vd-lavc-show-all=-:Flag (default\: no):' \
+  '--vd-lavc-skipidct=-:Choices\: none default nonref bidir nonkey all (default\: default):' \
+  '--ad-lavc-downmix=-:Flag (default\: yes):' \
+  '--ad-lavc-threads=-:Integer (1 to 16) (default\: 1):' \
+  '--ass-force-style=-:String list (default\: ):' \
+  '--ass-use-margins=-:Flag (default\: no):' \
+  '--cache-file-size=-:Integer (0 to 2147483647) (default\: 1048576):' \
+  '--cdda-toc-offset=-:Integer (default\: 0):' \
+  '--cursor-autohide=-:Choices\: no always (or an integer) (0 to 30000) (default\: 1000):' \
+  '--field-dominance=-:Choices\: auto top bottom (default\: auto):' \
+  '--input-lirc-conf=-:String (default\: ) [global]:' \
+  '--list-properties=-:Print [global] [nocfg]:' \
+  '--no-video-aspect=-:Flag:' \
+  '--osd-bar-align-x=-:Float (-1 to 1) (default\: 0.000000):' \
+  '--osd-bar-align-y=-:Float (-1 to 1) (default\: 0.500000):' \
+  '--osd-border-size=-:Float (0 to 10) (default\: 2.500000):' \
+  '--osd-playing-msg=-:String (default\: ):' \
+  '--resume-playback=-:Flag (default\: yes):' \
+  '--sub-forced-only=-:Flag (default\: no):' \
+  '--term-status-msg=-:String (default\: ):' \
+  '--vd-lavc-threads=-:Integer (0 to 16) (default\: 0):' \
+  '--window-dragging=-:Flag (default\: yes) [global]:' \
+  '--ad-lavc-ac3drc=-:Float (0 to 2) (default\: 1.000000):' \
+  '--ad-spdif-dtshd=-:Flag (default\: no):' \
+  '--audio-channels=-:Audio channels or channel map (0 to any):' \
+  '--autofit-larger=-:Window size:' \
+  '--cache-seek-min=-:Integer (0 to 2147483647) (default\: 500):' \
+  '--demuxer-lavf-o=-:Key/value list (default\: ):' \
+  '--demuxer-thread=-:Flag (default\: yes):' \
+  '--input-ar-delay=-:Integer (default\: 200) [global]:' \
+  '--input-joystick=-:Flag (default\: no) [global]:' \
+  '--input-terminal=-:Flag (default\: yes) [global]:' \
+  '--list-protocols=-:Print [global] [nocfg]:' \
+  '--osd-back-color=-:Color:' \
+  '--osd-status-msg=-:String (default\: ):' \
+  '--rtsp-transport=-:Choices\: lavf udp tcp http (default\: tcp):' \
+  '--stream-capture=-:String (default\: ) [file]:->files' \
+  '--sub-fix-timing=-:Flag (default\: yes):' \
+  '--sub-text-color=-:Color:' \
+  '--sub-visibility=-:Flag (default\: yes):' \
+  '--tv-scan-period=-:Float (0.1 to 2) (default\: 0.500000):' \
+  '--video-unscaled=-:Flag (default\: no):' \
+  '--audio-demuxer=-:String (default\: ):' \
+  '--audio-display=-:Choices\: no attachment (default\: attachment):' \
+  '--bluray-device=-:String (default\: ) [file]:->files' \
+  '--cache-default=-:Choices\: no (or an integer) (32 to 2147483647) (default\: 25000):' \
+  '--cache-initial=-:Integer (0 to 2147483647) (default\: 0):' \
+  '--cdda-paranoia=-:Integer (0 to 2) (default\: 0):' \
+  '--cdda-toc-bias=-:Integer (default\: 0):' \
+  '--dvbin-timeout=-:Integer (1 to 30) (default\: 30):' \
+  '--embeddedfonts=-:Flag (default\: yes):' \
+  '--gapless-audio=-:Choices\: no yes  weak (default\: weak):' \
+  '--heartbeat-cmd=-:String (default\: ):' \
+  '--input-ar-rate=-:Integer (default\: 40) [global]:' \
+  '--input-cmdlist=-:Print [global] [nocfg]:' \
+  '--input-keylist=-:Print [global] [nocfg]:' \
+  '--monitoraspect=-:Float (0 to 9) (default\: 0.000000):' \
+  '--osd-font-size=-:Float (1 to 9000) (default\: 45.000000):' \
+  '--osd-fractions=-:Flag (default\: no):' \
+  '--secondary-sid=-:Choices\: no auto (or an integer) (1 to 8190) (default\: no):' \
+  '--stream-lavf-o=-:Key/value list (default\: ):' \
+  '--sub-text-blur=-:Float (0 to 20) (default\: 0.000000):' \
+  '--sub-text-font=-:String (default\: sans-serif):' \
+  '--tv-brightness=-:Integer (-100 to 100) (default\: 0):' \
+  '--tv-buffersize=-:Integer (16 to 1024) (default\: -1):' \
+  '--tv-decimation=-:Integer (1 to 4) (default\: 2):' \
+  '--tv-forceaudio=-:Flag (default\: no):' \
+  '--tv-saturation=-:Integer (-100 to 100) (default\: 0):' \
+  '--video-align-x=-:Float (-1 to 1) (default\: 0.000000):' \
+  '--video-align-y=-:Float (-1 to 1) (default\: 0.000000):' \
+  '--audio-buffer=-:Double (0 to 10) (default\: 0.200000):' \
+  '--audio-format=-:Audio format:' \
+  '--bluray-angle=-:Integer (0 to 999) (default\: 0):' \
+  '--cdda-overlap=-:Integer (0 to 75) (default\: -1):' \
+  '--cdrom-device=-:String (default\: ) [file]:->files' \
+  '--cookies-file=-:String (default\: ) [file]:->files' \
+  '--force-window=-:Flag (default\: no) [global]:' \
+  '--hwdec-codecs=-:String (default\: h264,vc1,wmv3):' \
+  '--input-cursor=-:Flag (default\: yes) [global]:' \
+  '--input-js-dev=-:String (default\: ) [global]:' \
+  '--list-options=-:Flag [nocfg]:' \
+  '--load-scripts=-:Flag (default\: yes) [global]:' \
+  '--osd-duration=-:Integer (0 to 3600000) (default\: 1000):' \
+  '--osd-margin-x=-:Integer (0 to 300) (default\: 25):' \
+  '--osd-margin-y=-:Integer (0 to 600) (default\: 10):' \
+  '--pvr-abitrate=-:Integer (default\: 0):' \
+  '--pvr-vbitrate=-:Integer (default\: 0):' \
+  '--really-quiet=-:Flag [global]:' \
+  '--show-profile=-:String (default\: ) [nocfg]:->profile' \
+  '--slave-broken=-:Flag (default\: no) [global]:' \
+  '--sub-codepage=-:String (default\: auto):' \
+  '--term-osd-bar=-:Flag (default\: no):' \
+  '--tv-audiorate=-:Integer (default\: 44100):' \
+  '--tv-forcechan=-:Integer (1 to 2) (default\: -1):' \
+  '--vd-lavc-fast=-:Flag (default\: no):' \
+  '--video-aspect=-:Float (-1 to 10) (default\: -1.000000):' \
+  '--video-rotate=-:Choices\: no (or an integer) (0 to 359) (default\: 0):' \
+  '--af-defaults=-:Object settings list (default\: ):' \
+  '--ao-defaults=-:Object settings list (default\: ):' \
+  '--ass-hinting=-:Choices\: none light normal native (default\: none):' \
+  '--audio-delay=-:Float (-100 to 100) (default\: 0.000000):' \
+  '--cache-pause=-:Flag (default\: yes):' \
+  '--cdda-device=-:String (default\: ):' \
+  '--colormatrix=-:Choices\: auto BT.601 BT.709 SMPTE-240M BT.2020-NCL BT.2020-CL YCgCo (default\: auto):' \
+  '--correct-pts=-:Flag (default\: yes):' \
+  '--deinterlace=-:Choices\: auto no yes  (default\: auto):' \
+  '--display-fps=-:Double (0 to any) (default\: 0.000000):' \
+  '--hls-bitrate=-:Choices\: no min max (default\: no):' \
+  '--leak-report=-:Flag [global] [nocfg]:' \
+  '--media-title=-:String (default\: ):' \
+  '--merge-files=-:Flag (default\: no):' \
+  '--osd-spacing=-:Float (-10 to 10) (default\: 0.000000):' \
+  '--quvi-format=-:String (default\: ):' \
+  '--softvol-max=-:Float (10 to 10000) (default\: 200.000000):' \
+  '--stream-dump=-:String (default\: ) [file]:->files' \
+  '--sub-demuxer=-:String (default\: ):' \
+  '--tls-ca-file=-:String (default\: ) [file]:->files' \
+  '--tv-automute=-:Integer (0 to 255) (default\: 0):' \
+  '--tv-chanlist=-:String (default\: europe-east):' \
+  '--tv-channels=-:String list (default\: ):' \
+  '--tv-contrast=-:Integer (-100 to 100) (default\: 0):' \
+  '--vf-defaults=-:Object settings list (default\: ):' \
+  '--video-pan-x=-:Float (-3 to 3) (default\: 0.000000):' \
+  '--video-pan-y=-:Float (-3 to 3) (default\: 0.000000):' \
+  '--vo-defaults=-:Object settings list (default\: ):' \
+  '--ass-shaper=-:Choices\: simple complex (default\: complex):' \
+  '--ass-styles=-:String (default\: ) [file]:->files' \
+  '--audio-file=-:String list (default\: ) [file]:->files' \
+  '--brightness=-:Integer (-100 to 100) (default\: 1000):' \
+  '--cache-file=-:String (default\: ) [file]:->files' \
+  '--cache-secs=-:Double (0 to any) (default\: 2.000000):' \
+  '--cdda-speed=-:Integer (1 to 100) (default\: 0):' \
+  '--config-dir=-:String (default\: ) [global] [nocfg]:' \
+  '--dump-stats=-:String (default\: ) [global]:' \
+  '--dvbin-card=-:Integer (1 to 4) (default\: 1):' \
+  '--dvbin-file=-:String (default\: ):' \
+  '--dvbin-prog=-:String (default\: ):' \
+  '--dvd-device=-:String (default\: ) [file]:->files' \
+  '--fullscreen=-:Flag (default\: no):' \
+  '--input-conf=-:String (default\: ) [global]:' \
+  '--input-file=-:String (default\: ) [global]:' \
+  '--input-lirc=-:Flag (default\: yes) [global]:' \
+  '--input-test=-:Flag (default\: no) [global]:' \
+  '--keepaspect=-:Flag (default\: yes):' \
+  '--msg-module=-:Flag (default\: no) [global]:' \
+  '--oneverdrop=-:Flag (default\: no) [global]:' \
+  '--pvr-alayer=-:Integer (default\: 0):' \
+  '--pvr-aspect=-:Integer (default\: 0):' \
+  '--saturation=-:Integer (-100 to 100) (default\: 1000):' \
+  '--sws-scaler=-:Choices\: fast-bilinear bilinear bicubic x point area bicublin gauss sinc lanczos spline (default\: bicubic):' \
+  '--tls-verify=-:Flag (default\: no):' \
+  '--tv-adevice=-:String (default\: ):' \
+  '--tv-audioid=-:Integer (0 to 9) (default\: 0):' \
+  '--tv-balance=-:Integer (0 to 65535) (default\: -1):' \
+  '--tv-channel=-:String (default\: ):' \
+  '--tv-quality=-:Integer (0 to 100) (default\: 90):' \
+  '--user-agent=-:String (default\: mpv 0.6.2):' \
+  '--video-zoom=-:Float (-20 to 20) (default\: 0.000000):' \
+  '--ad-lavc-o=-:Key/value list (default\: ):' \
+  '--cdda-skip=-:Flag (default\: yes):' \
+  '--cdda-span=-:Int[-Int]:' \
+  '--dvd-angle=-:Integer (1 to 99) (default\: 1):' \
+  '--dvd-speed=-:Integer (default\: 0):' \
+  '--framedrop=-:Choices\: no vo decoder decoder+vo (default\: vo):' \
+  '--fs-screen=-:Choices\: all current (or an integer) (0 to 32) (default\: current):' \
+  '--keep-open=-:Flag (default\: no):' \
+  '--loop-file=-:Choices\: yes  no inf (or an integer) (0 to 10000) (default\: no):' \
+  '--msg-color=-:Flag (default\: yes) [global]:' \
+  '--msg-level=-:Output verbosity levels (default\: ) [global]:' \
+  '--ometadata=-:Flag (default\: yes) [global]:' \
+  '--osd-bar-h=-:Float (0.1 to 50) (default\: 3.125000):' \
+  '--osd-bar-w=-:Float (1 to 100) (default\: 75.000000):' \
+  '--osd-color=-:Color:' \
+  '--osd-level=-:Choices\: 0 1 2 3 (default\: 1):' \
+  '--osd-scale=-:Float (0 to 100) (default\: 1.000000):' \
+  '--pvr-amode=-:String (default\: ):' \
+  '--pvr-arate=-:Integer (default\: 0):' \
+  '--pvr-vmode=-:String (default\: ):' \
+  '--pvr-vpeak=-:Integer (default\: 0):' \
+  '--sub-delay=-:Float (default\: 0.000000):' \
+  '--sub-gauss=-:Float (0 to 3) (default\: 0.000000):' \
+  '--sub-paths=-:String list (default\: ):' \
+  '--sub-scale=-:Float (0 to 100) (default\: 1.000000):' \
+  '--sub-speed=-:Float (default\: 1.000000):' \
+  '--tv-device=-:String (default\: ):' \
+  '--tv-driver=-:String (default\: ):' \
+  '--tv-height=-:Integer (0 to 4096) (default\: -1):' \
+  '--tv-normid=-:Integer (default\: -1):' \
+  '--tv-outfmt=-:FourCC:' \
+  '--tv-treble=-:Integer (0 to 65535) (default\: -1):' \
+  '--tv-volume=-:Integer (0 to 65535) (default\: -1):' \
+  '--vd-lavc-o=-:Key/value list (default\: ):' \
+  '--x11-netwm=-:Flag (default\: yes):' \
+  '--autosync=-:Choices\: no (or an integer) (0 to 10000) (default\: 0):' \
+  '--contrast=-:Integer (-100 to 100) (default\: 1000):' \
+  '--fixed-vo=-:Flag (default\: yes) [global]:' \
+  '--geometry=-:Window geometry:' \
+  '--lua-opts=-:Key/value list (default\: ) [global]:' \
+  '--msg-time=-:Flag (default\: no) [global]:' \
+  '--no-audio=-:Flag:' \
+  '--no-video=-:Flag:' \
+  '--oaoffset=-:Float (-1000000 to 1000000) (default\: 0.000000) [global]:' \
+  '--oautofps=-:Flag (default\: no) [global]:' \
+  '--oharddup=-:Flag (default\: no) [global]:' \
+  '--osd-blur=-:Float (0 to 20) (default\: 0.000000):' \
+  '--osd-font=-:String (default\: sans-serif):' \
+  '--osd-msg1=-:String (default\: ):' \
+  '--osd-msg2=-:String (default\: ):' \
+  '--osd-msg3=-:String (default\: ):' \
+  '--ovoffset=-:Float (-1000000 to 1000000) (default\: 0.000000) [global]:' \
+  '--playlist=-:String (1 to any) (default\: ) [nocfg] [file]:->files' \
+  '--referrer=-:String (default\: ):' \
+  '--sub-auto=-:Choices\: no exact fuzzy all (default\: exact):' \
+  '--sub-file=-:String list (default\: ) [file]:->files' \
+  '--sub-gray=-:Flag (default\: no):' \
+  '--term-osd=-:Choices\: force auto no (default\: auto):' \
+  '--terminal=-:Flag (default\: yes) [global]:' \
+  '--tv-amode=-:Integer (0 to 3) (default\: -1):' \
+  '--tv-audio=-:Flag (default\: yes):' \
+  '--tv-input=-:Integer (default\: 0):' \
+  '--tv-mjpeg=-:Flag (default\: no):' \
+  '--tv-width=-:Integer (0 to 4096) (default\: -1):' \
+  '--x11-name=-:String (default\: ):' \
+  '--autofit=-:Window size:' \
+  '--chapter=-:Int[-Int]:' \
+  '--cookies=-:Flag (default\: no):' \
+  '--demuxer=-:String (default\: ):' \
+  '--edition=-:Choices\: auto (or an integer) (0 to 8190) (default\: auto):' \
+  '--hr-seek=-:Choices\: no absolute always yes (default\: absolute):' \
+  '--include=-:String (default\: ) [file]:->files' \
+  '--mf-type=-:String (default\: ):' \
+  '--oacopts=-:String list (default\: ) [global]:' \
+  '--oafirst=-:Flag (default\: no) [global]:' \
+  '--ocopyts=-:Flag (default\: no) [global]:' \
+  '--omaxfps=-:Float (0 to 1000000) (default\: 0.000000) [global]:' \
+  '--osd-bar=-:Flag (default\: yes):' \
+  '--ovcopts=-:String list (default\: ) [global]:' \
+  '--ovfirst=-:Flag (default\: no) [global]:' \
+  '--panscan=-:Float (0 to 1) (default\: 0.000000):' \
+  '--profile=-:String list (default\: ):->profiles' \
+  '--pvr-fmt=-:String (default\: ):' \
+  '--shuffle=-:Flag (default\: no) [global] [nocfg]:' \
+  '--softvol=-:Choices\: no yes auto (default\: auto):' \
+  '--sub-ass=-:Flag (default\: yes):' \
+  '--sub-fps=-:Float (default\: 0.000000):' \
+  '--sub-pos=-:Integer (0 to 100) (default\: 100):' \
+  '--sws-cgb=-:Float (0 to 100) (default\: 0.000000):' \
+  '--sws-chs=-:Integer (default\: 0):' \
+  '--sws-cvs=-:Integer (default\: 0):' \
+  '--sws-lgb=-:Float (0 to 100) (default\: 0.000000):' \
+  '--tv-alsa=-:Flag (default\: no):' \
+  '--tv-bass=-:Integer (0 to 65535) (default\: -1):' \
+  '--tv-freq=-:String (default\: ):' \
+  '--tv-gain=-:Integer (-1 to 100) (default\: -1):' \
+  '--tv-norm=-:String (default\: pal):' \
+  '--untimed=-:Flag (default\: no):' \
+  '--version=-:Print [global] [nocfg]:' \
+  '--border=-:Flag (default\: yes):' \
+  '--config=-:Flag (default\: yes) [global] [nocfg]:' \
+  '--frames=-:Choices\: all (or an integer) (0 to 2147483647) (default\: all):' \
+  '--length=-:Relative time or percent position:' \
+  '--mf-fps=-:Double (default\: 1.000000):' \
+  '--no-sub=-:Flag:' \
+  '--ofopts=-:String list (default\: ) [global]:' \
+  '--orawts=-:Flag (default\: no) [global]:' \
+  '--screen=-:Choices\: default (or an integer) (0 to 32) (default\: default):' \
+  '--sws-cs=-:Float (-100 to 100) (default\: 0.000000):' \
+  '--sws-ls=-:Float (-100 to 100) (default\: 0.000000):' \
+  '--tv-fps=-:Float (default\: -1.000000):' \
+  '--tv-hue=-:Integer (-100 to 100) (default\: 0):' \
+  '--volume=-:Float (-1 to 100) (default\: -1.000000):' \
+  '--alang=-:String list (default\: ):' \
+  '--cache=-:Choices\: no auto (or an integer) (32 to 2147483647) (default\: auto):' \
+  '--dtshd=-:Flag (default\: no):' \
+  '--gamma=-:Integer (-100 to 100) (default\: 1000):' \
+  '--hwdec=-:Choices\: no auto vdpau vda vaapi vaapi-copy (default\: no):' \
+  '--index=-:Choices\: default recreate (default\: default):' \
+  '--ontop=-:Flag (default\: no):' \
+  '--pause=-:Flag (default\: no):' \
+  '--quiet=-:Flag (default\: no) [global]:' \
+  '--slang=-:String list (default\: ):' \
+  '--speed=-:Double (0.01 to 100) (default\: 1.000000):' \
+  '--sstep=-:Double (0 to any) (default\: 0.000000):' \
+  '--start=-:Relative time or percent position:' \
+  '--title=-:String (default\: mpv - ${media-title}):' \
+  '--help=-:Print [global] [nocfg]:' \
+  '--idle=-:Flag (default\: no) [global]:' \
+  '--loop=-:Choices\: no 1 inf (or an integer) (2 to 10000) (default\: no) [global]:' \
+  '--mute=-:Choices\: auto no yes  (default\: auto):' \
+  '--ofps=-:Float (0 to 1000000) (default\: 0.000000) [global]:' \
+  '--aid=-:Choices\: no auto (or an integer) (1 to 8190) (default\: auto):' \
+  '--end=-:Relative time or percent position:' \
+  '--fps=-:Double (0 to any) (default\: 0.000000):' \
+  '--hue=-:Integer (-100 to 100) (default\: 1000):' \
+  '--lua=-:String list (default\: ) [global] [file]:->files' \
+  '--oac=-:String (default\: ) [global]:' \
+  '--osc=-:Flag (default\: yes) [global]:' \
+  '--ovc=-:String (default\: ) [global]:' \
+  '--sid=-:Choices\: no auto (or an integer) (1 to 8190) (default\: auto):' \
+  '--vid=-:Choices\: no auto (or an integer) (1 to 8190) (default\: auto):' \
+  '--wid=-:Integer64 (default\: -1) [global]:' \
+  '--ad=-:String (default\: -spdif\:*):' \
+  '--af=-:Object settings list (default\: ):->af' \
+  '--ao=-:Object settings list (default\: ):->ao' \
+  '--fs=-:Flag (default\: no):' \
+  '--mc=-:Float (0 to 100) (default\: -1.000000):' \
+  '--of=-:String (default\: ) [global]:' \
+  '--vd=-:String (default\: ):' \
+  '--vf=-:Object settings list (default\: ):->vf' \
+  '--vo=-:Object settings list (default\: ):->vo' \
+  '--h=-:Print [global] [nocfg]:' \
+  '--o=-:String (default\: ) [global] [nocfg]:' \
+  '--v=-:Flag [global] [nocfg]:' \
+  '--V=-:Print [global] [nocfg]:' \
+  '--{=-:Flag [nocfg]:' \
+  '--}=-:Flag [nocfg]:' \
+  '*:files:->mfiles' && rc=0
+
+case $state in
+  ao)
+    local -a values
+    values=(
+      'pulse:PulseAudio audio output' \
+      'alsa:ALSA-0.9.x-1.x audio output' \
+      'oss:OSS/ioctl audio output' \
+      'portaudio:PortAudio' \
+      'jack:JACK audio output' \
+      'null:Null audio output' \
+      'pcm:RAW PCM/WAVE file writer audio output' \
+    )
+
+    _describe -t values 'audio outputs' values && rc=0
+  ;;
+
+  vo)
+    local -a values
+    values=(
+      'opengl:Extended OpenGL Renderer' \
+      'vdpau:VDPAU with X11' \
+      'xv:X11/Xv' \
+      'opengl-old:OpenGL (legacy VO, may work better on older GPUs)' \
+      'vaapi:VA API with X11' \
+      'x11:X11 ( XImage/Shm )' \
+      'null:Null video output' \
+      'image:Write video frames to image files' \
+      'opengl-hq:Extended OpenGL Renderer (high quality rendering preset)' \
+      'wayland:Wayland SHM video output' \
+    )
+
+    _describe -t values 'video outputs' values && rc=0
+  ;;
+
+  af)
+    local -a values
+    values=(
+      'dummy:dummy' \
+      'delay:Delay audio filter' \
+      'channels:Insert or remove channels' \
+      'format:Force audio format' \
+      'volume:Volume control audio filter' \
+      'equalizer:Equalizer audio filter' \
+      'pan:Panning audio filter' \
+      'surround:Surround decoder filter' \
+      'sub:Audio filter for adding a sub-base channel' \
+      'export:Sound export filter' \
+      'drc:Dynamic range compression filter' \
+      'extrastereo:Increase difference between audio channels' \
+      'lavcac3enc:runtime encode to ac3 using libavcodec' \
+      'lavrresample:Sample frequency conversion using libavresample' \
+      'sweep:sine sweep' \
+      'hrtf:HRTF Headphone' \
+      'ladspa:LADSPA plugin loader' \
+      'center:Audio filter for adding a center channel' \
+      'sinesuppress:Sine Suppress' \
+      'karaoke:Simple karaoke/voice-removal audio filter' \
+      'scaletempo:Scale audio tempo while maintaining pitch' \
+      'lavfi:libavfilter bridge' \
+      'convert24:Convert between 24 and 32 bit sample format' \
+      'convertsign:Convert between sample format sign' \
+    )
+
+    _describe -t values 'audio filters' values && rc=0
+  ;;
+
+  vf)
+    local -a values
+    values=(
+      'crop:cropping' \
+      'expand:expanding' \
+      'scale:software scaling' \
+      'format:force output format' \
+      'noformat:disallow one output format' \
+      'flip:flip image upside-down' \
+      'rotate:rotate' \
+      'mirror:horizontal mirror' \
+      'pp:postprocessing' \
+      'lavfi:libavfilter bridge' \
+      'screenshot:screenshot to file' \
+      'noise:noise generator' \
+      'eq:Software equalizer' \
+      'gradfun:gradient deband' \
+      'unsharp:unsharp mask & gaussian blur' \
+      'swapuv:UV swapper' \
+      'hqdn3d:High Quality 3D Denoiser' \
+      'ilpack:4\:2\:0 planar -> 4\:2\:2 packed reinterlacer' \
+      'dsize:reset displaysize/aspect' \
+      'softpulldown:mpeg2 soft 3\:2 pulldown' \
+      'pullup:pullup (from field sequence to frames)' \
+      'delogo:simple logo remover' \
+      'phase:phase shift fields' \
+      'divtc:inverse telecine for deinterlaced video' \
+      'sub:Render subtitles' \
+      'yadif:Yet Another DeInterlacing Filter' \
+      'stereo3d:stereoscopic 3d view' \
+      'buffer:buffer a number of frames' \
+      'dlopen:Dynamic library filter' \
+      'vavpp:VA-API Video Post-Process Filter' \
+      'vdpaupp:vdpau postprocessing' \
+    )
+
+    _describe -t values 'video filters' values && rc=0
+  ;;
+
+  profile|profiles)
+      local -a profiles
+      local current
+      for current in "${(@f)$($words[1] --profile=help)}"; do
+        current=${current//\*/\\\*}
+        current=${current//\:/\\\:}
+        current=${current//\[/\\\[}
+        current=${current//\]/\\\]}
+        if [[ $current =~ $'\t'([^$'\t']*)$'\t'(.*) ]]; then
+          if [[ -n $match[2] ]]; then
+            current="$match[1][$match[2]]"
+          else
+            current="$match[1]"
+          fi
+          profiles=($profiles $current)
+        fi
+      done
+      if [[ $state == profile ]]; then
+        # For --show-profile, only one allowed
+        if (( ${#profiles} > 0 )); then
+          _values 'profile' $profiles && rc=0
+        fi
+      else
+        # For --profile, multiple allowed
+        profiles=($profiles 'help[list profiles]')
+        _values -s , 'profile(s)' $profiles && rc=0
+      fi
+  ;;
+
+  files)
+    compset -P '*,'
+    compset -S ',*'
+    _files -r ',/ \t\n\-' && rc=0
+  ;;
+
+  mfiles)
+    local expl
+    _tags files
+    while _tags; do
+      _requested files expl 'media file' _files -g \
+         "*.(#i)(asf|asx|avi|flac|flv|m1v|m2p|m2v|m4v|mjpg|mka|mkv|mov|mp3|mp4|mpe|mpeg|mpg|ogg|ogm|ogv|qt|rm|ts|vob|wav|webm|wma|wmv)(-.)" && rc=0
+      (( rc )) || return 0
+    done
+  ;;
+esac
+
+return rc
