@@ -40,37 +40,37 @@ myWorkspaceKeys = [(k, m) | m <- masks, k <- keys]
           keys = [xK_1, xK_2, xK_3, xK_4, xK_apostrophe, xK_comma, xK_period, xK_p, xK_a, xK_o, xK_e] 
 
 myKeys conf = M.fromList $
-	[ ((modm	, xK_d ), spawn $ terminal conf )
-	, ((modm	, xK_i ), sendMessage NextLayout)
-	, ((modm	, xK_k ), windows W.focusDown )
-	, ((modm	, xK_j ), windows W.focusUp )
-	, ((modm	, xK_Return ), windows W.swapMaster )
-	, ((modm	, xK_u), withFocused $ windows . W.sink) -- Push window back into tiling
-	, ((modm	, xK_w ), sendMessage Shrink)
-	, ((modm	, xK_v ), sendMessage Expand)
-	, ((modm	, xK_semicolon ), sendMessage (IncMasterN (-1)))
-	, ((modm	, xK_q ), sendMessage (IncMasterN 1))
-	, ((modm	, xK_Delete ), kill )
-	, ((modm	, xK_b ), kill )
-	, ((modm	, xK_r ), shellPrompt defaultXPConfig )
+  [ ((modm  , xK_d ), spawn $ terminal conf )
+  , ((modm  , xK_i ), sendMessage NextLayout)
+  , ((modm  , xK_k ), windows W.focusDown )
+  , ((modm  , xK_j ), windows W.focusUp )
+  , ((modm  , xK_Return ), windows W.swapMaster )
+  , ((modm  , xK_u), withFocused $ windows . W.sink) -- Push window back into tiling
+  , ((modm  , xK_w ), sendMessage Shrink)
+  , ((modm  , xK_v ), sendMessage Expand)
+  , ((modm  , xK_semicolon ), sendMessage (IncMasterN (-1)))
+  , ((modm  , xK_q ), sendMessage (IncMasterN 1))
+  , ((modm  , xK_Delete ), kill )
+  , ((modm  , xK_b ), kill )
+  , ((modm  , xK_r ), shellPrompt defaultXPConfig )
   , ((modm             , xK_z ), scratchpadSpawnActionTerminal "urxvt" )
-	, ((modm	, xK_y ), broadcastMessage ReleaseResources >> restart "xmonad" True)
+  , ((modm  , xK_y ), broadcastMessage ReleaseResources >> restart "xmonad" True)
 
-	, ((modm  , xK_F1), spawn "setxkbmap dvorak; xmodmap ~/layouts/dvorak; xmodmap ~/.Xmodmap")
-	, ((modm  , xK_F2), spawn "setxkbmap fi; xmodmap ~/.Xmodmap")
+  , ((modm  , xK_F1), spawn "setxkbmap dvorak; xmodmap ~/layouts/dvorak; xmodmap ~/.Xmodmap")
+  , ((modm  , xK_F2), spawn "setxkbmap fi; xmodmap ~/.Xmodmap")
 
   , ((modm  , xK_F4), spawn "trackpad-toggle.sh")
-	]
+  ]
   -- Switch between monitors
   ++
   [((m .|. modm, key), screenWorkspace sc >>= flip whenJust (windows . f))
       | (key, sc) <- zip [xK_n, xK_s, xK_t] [0..]
       , (f, m) <- [(W.view, 0), (W.shift, shiftMask)]]
   -- Switch between workspaces
-	++
-	[((m1 .|. m2 .|. modm, k), windows $ f i)
-		| (i, (k, m1)) <- zip myWorkspaces myWorkspaceKeys
-		, (f, m2) <- [(W.greedyView, 0), (W.shift, shiftMask)]]
+  ++
+  [((m1 .|. m2 .|. modm, k), windows $ f i)
+    | (i, (k, m1)) <- zip myWorkspaces myWorkspaceKeys
+    , (f, m2) <- [(W.greedyView, 0), (W.shift, shiftMask)]]
  
 -- Mouse bindings
 myMouseBindings (XConfig {XMonad.modMask = modm}) = M.fromList $
@@ -97,16 +97,16 @@ myLayout = avoidStruts $ smartBorders (tiled ||| Mirror tiled ||| Full)
 
 myManageHook = scratchpadManageHookDefault <+> composeAll
   [ isFullscreen --> doFullFloat
-	, className =? "Firefox"        --> doShift "11"
-	, className =? "Smplayer"        --> doFloat
-	, className =? "mplayer2"        --> doFloat
-	, className =? "mpv"        --> doFloat
-	, className =? "mupen64plus"        --> doFloat
-	, className =? "Pavucontrol"        --> doFloat
-	, className =? "Steam"        --> doFloat
-	, className =? "DOTA 2 - OpenGL"        --> doFullFloat
-	, className =? "dota_linux"        --> doFullFloat
-	, className =? "dota.sh"        --> doFullFloat
+  , className =? "Firefox"        --> doShift "11"
+  , className =? "Smplayer"        --> doFloat
+  , className =? "mplayer2"        --> doFloat
+  , className =? "mpv"        --> doFloat
+  , className =? "mupen64plus"        --> doFloat
+  , className =? "Pavucontrol"        --> doFloat
+  , className =? "Steam"        --> doFloat
+  , className =? "DOTA 2 - OpenGL"        --> doFullFloat
+  , className =? "dota_linux"        --> doFullFloat
+  , className =? "dota.sh"        --> doFullFloat
   , className =? "Gimp"           --> doFloat
   , className =? "Vlc"           --> doFloat
   , title =? "neflEFortress" --> doFloat
