@@ -1,1 +1,1 @@
-export PATH="$HOME/bin:$PATH:$HOME/.cabal/bin"
+export PATH="$HOME/bin:$PATH:$HOME/.cabal/bin:$HOME/dotfiles/bin"

@@ -1,6 +1,6 @@
 setxkbmap dvorak
 xmodmap ~/.Xmodmap
-nappis.zsh
+key_repeat.zsh
 xrdb ~/.Xresources
 
 pulseaudio --start &
