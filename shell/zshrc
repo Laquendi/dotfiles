@@ -10,7 +10,9 @@ export BROWSER='firefox'
 BASE16_SHELL="$HOME/.config/base16-shell/base16-default.dark.sh"
 [[ -s $BASE16_SHELL ]] && source $BASE16_SHELL
 
-export LS_COLORS='no=00:di=34:tw=33;01:ow=33;01:ex=32:ln=36:fi=00:pi=00:so=00:bd=00:cd=00:or=00:mi=00:*.tgz=31:*.gz=31:*.zip=31:*.bz2=31:*.tar=31'
+
+[[ -f ~/.dircolors ]] && \
+  source <(dircolors ~/.dircolors)
 
 zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
 
