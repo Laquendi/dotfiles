@@ -46,10 +46,10 @@ df_ncmpcpp()     { link ncmpcpp;                                         }
 df_mpd()         { link mpd/mpd.conf .config/mpd.conf;                   }
 df_termite()     { link termite .config/termite;                         }
 df_base16-shell() { link base16-shell .config/base16-shell;              }
-df_user-dirs()   { link user-dirs/user-dirs.dirs .config/user-dirs.dirs; }
 df_vimperator()  { link vimperator/vimperatorrc;                         }
 df_zsh()         { link zsh;                                             }
 df_mpv()         { link mpv;                                             }
+df_liferea()     { link liferea .config/liferea;                         }
 
 df_xmonad() { 
   link xmonad
