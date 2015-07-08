@@ -64,7 +64,7 @@ myKeys conf = M.fromList $
   -- Switch between monitors
   ++
   [((m .|. modm, key), screenWorkspace sc >>= flip whenJust (windows . f))
-      | (key, sc) <- zip [xK_n, xK_s, xK_t] [0..]
+      | (key, sc) <- zip [xK_n, xK_t, xK_s] [0..]
       , (f, m) <- [(W.view, 0), (W.shift, shiftMask)]]
   -- Switch between workspaces
   ++
