@@ -74,6 +74,7 @@ df_vim() {
 df_X() {
   link X/Xresources
   link X/xinitrc
+  link X/Xmodmap
 }
 # }}}
 
