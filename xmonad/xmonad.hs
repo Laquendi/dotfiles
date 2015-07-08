@@ -56,7 +56,7 @@ myKeys conf = M.fromList $
   , ((modm             , xK_z ), scratchpadSpawnActionTerminal myTerminal)
   , ((modm  , xK_y ), broadcastMessage ReleaseResources >> restart "xmonad" True)
 
-  , ((modm  , xK_F1), spawn "setxkbmap dvorak; modmap ~/.Xmodmap")
+  , ((modm  , xK_F1), spawn "setxkbmap dvorak; xmodmap ~/.Xmodmap")
   , ((modm  , xK_F2), spawn "setxkbmap fi")
 
   , ((modm  , xK_F4), spawn "trackpad-toggle.sh")
