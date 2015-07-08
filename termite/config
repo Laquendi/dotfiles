@@ -8,14 +8,14 @@ mouse_autohide = false
 dynamic_title = true
 urgent_on_bell = true
 clickable_url = true
-font = Envy Code R 10
+font = Mensch
 scrollback_lines = 1000000
 icon_name = terminal
 cursor_blink = off
 cursor_shape = block
 
 [hints]
-font = Envy Code R 7
+font = Mensch
 background = #bf0040
 padding = 1
 border_width = 2.5
