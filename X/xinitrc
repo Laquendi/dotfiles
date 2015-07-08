@@ -1,3 +1,13 @@
+export GTK_IM_MODULE=fcitx
+export XMODIFIERS=@im=fcitx
+export QT_IM_MODULE=fcitx
+
+fcitx
+
+pulseaudio --start &
+
+xrdb ~/.Xresources
+
 session() {
   exec dbus-launch --exit-with-session "${@}"
 }
@@ -8,13 +18,11 @@ case "$2" in
     exec gnome-session ;;
   steam)
     openbox &
-    nitrogen --restore
     session steam ;;
   xbmc)
     session "$2" ;;
   xmonad)
     session "$2" ;;
   *)
-    nitrogen --restore
     session "${2:-xmonad}" ;;
 esac

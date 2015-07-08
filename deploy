@@ -34,7 +34,6 @@ link() {
 }
 
 # Deploy scriptlets {{{1
-df_cower()       { link cower .config/cower;                             }
 df_dircolors()   { link dircolors/dircolors;                             }
 df_fontconfig()  { link fontconfig .config/fontconfig;                   }
 df_git()         { link git/gitconfig;                                   }
@@ -43,16 +42,12 @@ df_gtk3()        { link gtk-3.0 .config/gtk-3.0;                         }
 df_haskell()     { link haskell/haskeline;                               }
 df_htop()        { link htop/htoprc;                                     }
 df_lxdm()        { link lxdm/dmrc;                                       }
-df_mutt()        { link mutt;                                            }
 df_ncmpcpp()     { link ncmpcpp;                                         }
-df_pam()         { link pam/pam_environment;                             }
 df_mpd()         { link mpd/mpd.conf .config/mpd.conf;                   }
-df_systemd()     { link systemd .config/systemd;                         }
 df_termite()     { link termite .config/termite;                         }
 df_base16-shell() { link base16-shell .config/base16-shell;              }
 df_user-dirs()   { link user-dirs/user-dirs.dirs .config/user-dirs.dirs; }
 df_vimperator()  { link vimperator/vimperatorrc;                         }
-df_weechat()     { link weechat;                                         }
 
 df_xmonad() { 
   link xmonad
@@ -75,7 +70,6 @@ df_X() {
   link X/Xresources
   link X/xinitrc
   link X/Xmodmap
-  link X/xprofile
 }
 # }}}
 

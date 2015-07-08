@@ -20,7 +20,7 @@ import XMonad.Layout.NoBorders
 import XMonad.Actions.CopyWindow
 import XMonad.SpawnOn
 
-myTerminal      = "termite"
+myTerminal      = "urxvt"
  
 myFocusFollowsMouse :: Bool
 myFocusFollowsMouse = True
@@ -76,6 +76,8 @@ myKeys conf = M.fromList $
   , ((modm  , xK_r ), shellPrompt myXPConfig )
   , ((modm             , xK_z ), scratchpadSpawnActionTerminal myTerminal)
   , ((modm  , xK_y ), broadcastMessage ReleaseResources >> restart "xmonad" True)
+
+  , ((modm  , xK_h), spawn "random_wallpapers")
 
   , ((modm  , xK_F1), spawn "setxkbmap dvorak; xmodmap ~/.Xmodmap")
   , ((modm  , xK_F2), spawn "setxkbmap fi")

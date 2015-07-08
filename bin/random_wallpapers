@@ -1,0 +1,11 @@
+#!/usr/bin/python
+ 
+import glob
+import random
+import os
+ 
+files = glob.glob("/home/santtu/Wallpapers/*")
+random.shuffle(files)
+command = "feh --no-fehbg --bg-fill '" + files[0] + "' '" + files[1] + "' '" + files[2] + "'"
+os.system(command)
+
