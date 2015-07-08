@@ -75,6 +75,7 @@ df_X() {
   link X/Xresources
   link X/xinitrc
   link X/Xmodmap
+  link X/xprofile
 }
 # }}}
 

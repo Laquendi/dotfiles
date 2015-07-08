@@ -5,16 +5,6 @@ xrdb ~/.Xresources
 
 pulseaudio --start &
 
-export GTK_IM_MODULE=ibus
-export XMODIFIERS=@im=ibus
-export QT_IM_MODULE=ibus
-
-ibus-daemon -drx
-
-xrandr --setprovideroutputsource modesetting NVIDIA-0
-xrandr --auto
-#xrandr --output eDP-1-0 --off
-
 session() {
   exec dbus-launch --exit-with-session "${@}"
 }
