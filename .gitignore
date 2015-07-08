@@ -28,3 +28,4 @@ xmonad/xmonad.errors
 xmonad/history
 vim/bundle/*
 !vim/bundle/neobundle.vim
+mpv/watch_later
