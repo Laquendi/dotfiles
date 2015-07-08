@@ -1,5 +1,5 @@
+setxkbmap dvorak
 xmodmap ~/.Xmodmap
-xmodmap ~/layouts/dvorak
 nappis.zsh
 xrdb ~/.Xresources
 
