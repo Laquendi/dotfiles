@@ -21,7 +21,7 @@ NeoBundle 'Shougo/vimproc.vim', {
 
 "NeoBundle 'eagletmt/ghcmod-vim'
 NeoBundle 'vim-scripts/Superior-Haskell-Interaction-Mode-SHIM'
-NeoBundle 'dan-t/vim-hdevtools'
+"NeoBundle 'dan-t/vim-hdevtools'
 NeoBundle 'scrooloose/syntastic'
 NeoBundle 'junegunn/vim-easy-align'
 NeoBundle 'slim-template/vim-slim'
