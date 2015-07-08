@@ -125,14 +125,14 @@ myStartupHook = do
     -- Check for the first start
     unless ("--resume" `elem` args) $ do
         spawnOn "16" "liferea"
-        spawnOn "17" "urxvt -e env RUN_POSTGRES=1 zsh -i"
-        spawnOn "17" "urxvt -e env RUN_GIZLO=1 zsh -i"
-        replicateM 4 $ spawnOn "6" "urxvt -e env RUN_GIZLO=1 zsh -i"
-        replicateM 4 $ spawnOn "7" "urxvt -e env RUN_GIZLO_DASHBOARD=1 zsh -i"
+        spawnOn "17"  (myTerminal ++ " -e env RUN_POSTGRES=1 zsh -i")
+        spawnOn "17"  (myTerminal ++ " -e env RUN_GIZLO=1 zsh -i")
+        replicateM 4 $ spawnOn "6"  (myTerminal ++ " -e env RUN_GIZLO=1 zsh -i")
+        replicateM 4 $ spawnOn "7"  (myTerminal ++ " -e env RUN_GIZLO_DASHBOARD=1 zsh -i")
         spawnOn "10" "tagainijisho"
         spawn "firefox"
-        spawnOn "3" "urxvt -e env RUN_IRC=1 zsh -i"
-        spawnOn "20" "urxvt -e env RUN_RTORRENT=1 zsh -i"
+        spawnOn "3"  (myTerminal ++ " -e env RUN_IRC=1 zsh -i")
+        spawnOn "20"  (myTerminal ++ " -e env RUN_RTORRENT=1 zsh -i")
  
 main = xmonad =<< xmobar defaults
 
