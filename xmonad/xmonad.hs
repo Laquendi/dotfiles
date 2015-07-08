@@ -1,341 +1,162 @@
-import Control.Applicative
+import XMonad
 import Data.Monoid
-import Data.Ratio
 import System.Exit
-import System.Posix.Unistd (getSystemID, nodeName)
-import qualified Data.Map as M
-import qualified Network.MPD as MPD
-import qualified Network.MPD.Commands.Extensions as MPD
+import System.Environment
+import Control.Monad
+ 
+import qualified XMonad.StackSet as W
+import qualified Data.Map        as M
 
-import XMonad hiding (spawn)
-import XMonad.Actions.CopyWindow
-import XMonad.Actions.CycleWS hiding (shiftTo, moveTo, toggleWS)
-import XMonad.Hooks.EwmhDesktops
-import XMonad.Hooks.InsertPosition
+import XMonad.Prompt
+import XMonad.Prompt.Shell
+import XMonad.Prompt.XMonad
+import XMonad.Util.Scratchpad
+import XMonad.Util.Run
+import XMonad.Hooks.DynamicLog 
 import XMonad.Hooks.ManageDocks
 import XMonad.Hooks.ManageHelpers
-import XMonad.Hooks.UrgencyHook
-import XMonad.Hooks.VodikLog
-import XMonad.Layout.BalancedTile
+import XMonad.Hooks.SetWMName
 import XMonad.Layout.NoBorders
-import XMonad.Layout.PerWorkspace
-import XMonad.Layout.Renamed
-import XMonad.Layout.SortWindows
-import XMonad.Layout.Tabbed
-import XMonad.Layout.ToggleLayouts hiding (Toggle)
-import XMonad.Layout.WindowGaps
-import XMonad.Prompt
-import XMonad.Prompt.Shell (shellPrompt)
-import XMonad.Util
-import XMonad.Util.Commands
-import XMonad.Util.Cursor
-import XMonad.Util.CycleWS
-import XMonad.Util.Environment
-import XMonad.Util.EZConfig
-import XMonad.Util.MPD
-import XMonad.Util.NamedScratchpad
-import XMonad.Util.RunOnce
-import XMonad.Util.Services
-import XMonad.Util.TagBuilder
-import XMonad.Util.Tmux
-import qualified XMonad.StackSet as W
-import qualified XMonad.Actions.FlexibleResize as Flex
-import qualified XMonad.Actions.Search as S
+import XMonad.Actions.CopyWindow
+import XMonad.SpawnOn
 
-scratchpads :: NamedScratchpads
-scratchpads =
-    [ NS "scratchpad" scratchpad    (role      =? "scratchpad")  nonFloating
-    , NS "volume"     "pavucontrol" (className =? "Pavucontrol") nonFloating
+myTerminal      = "urxvt"
+ 
+myFocusFollowsMouse :: Bool
+myFocusFollowsMouse = True
+ 
+myBorderWidth   = 1
+ 
+modm       = mod4Mask
+--modAlt     = mod1Mask
+ 
+myWorkspaces = map show [1..22]
+ 
+myNormalBorderColor = "#111137"
+myFocusedBorderColor = "#FF1155"
+
+myWorkspaceKeys = [(k, m) | m <- masks, k <- keys]
+    where masks = [0, controlMask]
+          keys = [xK_1, xK_2, xK_3, xK_4, xK_apostrophe, xK_comma, xK_period, xK_p, xK_a, xK_o, xK_e] 
+
+myKeys conf = M.fromList $
+	[ ((modm	, xK_d ), spawn $ terminal conf )
+	, ((modm	, xK_i ), sendMessage NextLayout)
+	, ((modm	, xK_k ), windows W.focusDown )
+	, ((modm	, xK_j ), windows W.focusUp )
+	, ((modm	, xK_Return ), windows W.swapMaster )
+	, ((modm	, xK_u), withFocused $ windows . W.sink) -- Push window back into tiling
+	, ((modm	, xK_w ), sendMessage Shrink)
+	, ((modm	, xK_v ), sendMessage Expand)
+	, ((modm	, xK_semicolon ), sendMessage (IncMasterN (-1)))
+	, ((modm	, xK_q ), sendMessage (IncMasterN 1))
+	, ((modm	, xK_Delete ), kill )
+	, ((modm	, xK_b ), kill )
+	, ((modm	, xK_r ), shellPrompt defaultXPConfig )
+  , ((modm             , xK_z ), scratchpadSpawnActionTerminal "urxvt" )
+	, ((modm	, xK_y ), broadcastMessage ReleaseResources >> restart "xmonad" True)
+
+	, ((modm  , xK_F1), spawn "setxkbmap dvorak; xmodmap ~/layouts/dvorak; xmodmap ~/.Xmodmap")
+	, ((modm  , xK_F2), spawn "setxkbmap fi; xmodmap ~/.Xmodmap")
+
+  , ((modm  , xK_F4), spawn "trackpad-toggle.sh")
+	]
+  -- Switch between monitors
+  ++
+  [((m .|. modm, key), screenWorkspace sc >>= flip whenJust (windows . f))
+      | (key, sc) <- zip [xK_n, xK_s, xK_t] [0..]
+      , (f, m) <- [(W.view, 0), (W.shift, shiftMask)]]
+  -- Switch between workspaces
+	++
+	[((m1 .|. m2 .|. modm, k), windows $ f i)
+		| (i, (k, m1)) <- zip myWorkspaces myWorkspaceKeys
+		, (f, m2) <- [(W.greedyView, 0), (W.shift, shiftMask)]]
+ 
+-- Mouse bindings
+myMouseBindings (XConfig {XMonad.modMask = modm}) = M.fromList $
+    -- mod-button1, Set the window to floating mode and move by dragging
+    [ ((modm, button1), (\w -> focus w >> mouseMoveWindow w
+                                       >> windows W.shiftMaster))
+ 
+    -- mod-button2, Raise the window to the top of the stack
+    , ((modm, button2), (\w -> focus w >> windows W.shiftMaster))
+ 
+    -- mod-button3, Set the window to floating mode and resize by dragging
+    , ((modm, button3), (\w -> focus w >> mouseResizeWindow w
+                                       >> windows W.shiftMaster))
+ 
+    -- you may also bind events to the mouse scroll wheel (button4 and button5)
     ]
+ 
+myLayout = avoidStruts $ smartBorders (tiled ||| Mirror tiled ||| Full)
   where
-    scratchpad = "termite -r scratchpad"
+    tiled   = Tall nmaster delta ratio
+    nmaster = 1
+    ratio   = 1/2
+    delta   = 3/100
 
-tmuxSessions :: TmuxSessions
-tmuxSessions = [ TS "irc" "weechat-curses" ]
+myManageHook = scratchpadManageHookDefault <+> composeAll
+  [ isFullscreen --> doFullFloat
+	, className =? "Firefox"        --> doShift "11"
+	, className =? "Smplayer"        --> doFloat
+	, className =? "mplayer2"        --> doFloat
+	, className =? "mpv"        --> doFloat
+	, className =? "mupen64plus"        --> doFloat
+	, className =? "Pavucontrol"        --> doFloat
+	, className =? "Steam"        --> doFloat
+	, className =? "DOTA 2 - OpenGL"        --> doFullFloat
+	, className =? "dota_linux"        --> doFullFloat
+	, className =? "dota.sh"        --> doFullFloat
+  , className =? "Gimp"           --> doFloat
+  , className =? "Vlc"           --> doFloat
+  , title =? "neflEFortress" --> doFloat
+  , title =? "Isaac" --> doFloat
+  , className =? "Isaac" --> doFloat
+  , className =? "Wine" --> doFullFloat
+  , resource  =? "desktop_window" --> doIgnore
+  , resource  =? "kdesktop"       --> doIgnore 
+  ]
+ 
+myLogHook = dynamicLog
+ 
+myStartupHook = do
+    setWMName "LG3D"
+    args <- io getArgs
+    -- Check for the first start
+    unless ("--resume" `elem` args) $ do
+        spawnOn "16" "liferea"
+        spawnOn "17" "urxvt -e env RUN_POSTGRES=1 zsh -i"
+        spawnOn "17" "urxvt -e env RUN_GIZLO=1 zsh -i"
+        replicateM 4 $ spawnOn "6" "urxvt -e env RUN_GIZLO=1 zsh -i"
+        replicateM 4 $ spawnOn "7" "urxvt -e env RUN_GIZLO_DASHBOARD=1 zsh -i"
+        spawnOn "10" "tagainijisho"
+        spawn "firefox"
+        spawnOn "3" "urxvt -e env RUN_IRC=1 zsh -i"
+        spawnOn "20" "urxvt -e env RUN_RTORRENT=1 zsh -i"
+ 
+main = xmonad =<< xmobar myConfig
 
-myTerminal     = "termite"
-myBorderWidth  = 4
-myModMask      = mod4Mask
+myConfig = defaultConfig
 
-xftFont        = "xft:Envy Code R:size=10"
-colorBlack     = "#000000"
-colorGray      = "#484848"
-colorGrayAlt   = "#b8bcb8"
-colorDarkGray  = "#161616"
-colorWhite     = "#ffffff"
-colorWhiteAlt  = "#9d9d9d"
-colorBlue      = "#439dcA"
-colorRed       = "#f54669"
+ 
+defaults = defaultConfig {
+      -- simple stuff
+        terminal           = myTerminal,
+        focusFollowsMouse  = myFocusFollowsMouse,
+        borderWidth        = myBorderWidth,
+        modMask            = modm,
 
--- Layouts {{{1
-myLayoutRules sort tw =
-    let tfull  = toggleLayouts . name "Triggered" $ noBorders Full
-        tabs   = smartBorders $ tabbed shrinkText myTabTheme
-        tiled  = gaps 7 $ BalancedTall 2 step (11 % 20) [ 31 % 25 ]
-        mtiled = gaps 7 . Mirror $ BalancedTall (masterN tw) step (1/2) [ 31 % 25 ]
-        full   = noBorders Full
-        name t = renamed [ PrependWords t ]
-        step   = 1 % 50
-    in avoidStruts . lessBorders OnlyFloat . tfull
-        . onWorkspace "work"  (tabs   ||| tiled ||| mtiled)
-        . onWorkspace "term"  (mtiled ||| tiled)
-        . onWorkspace "chat"  (full   ||| tiled)
-        -- . onWorkspace "games" (full   ||| tiled)
-        $ tiled ||| mtiled
-
--- Rules {{{1
-myRules ws rect = manageDocks
-    <> composeOne
-        [ isDialog                        -?> idHook
-        , workspaceShift ws
-        , role      =? "scratchpad"       -?> customFloating rect
-        , className =? "Transmission-gtk" -?> doShift "work"
-        , className =? "Steam"            -?> doFloat -- <> doIgnore
-        , className =? "steam"            -?> doFullFloat
-        ]
-    <> composeOneCaught (insertPosition Below Newer)
-        [ className =? "Gvim"         -?> idHook
-        , className =? "Wine"         -?> doFloat
-        , className `queryAny` floats -?> doCenterFloat
-        , isDialog                    -?> doCenterFloat
-        , isFirefoxWindow             -?> doCenterFloat
-        , isFullscreen                -?> doFullFloat
-        ]
-  where
-    isFirefoxWindow = do
-        browser <- className `queryAny` [ "Firefox", "Aurora" ]
-        if browser
-            then role `queryNone` [ "browser", "view-source", "manager" ]
-            else return False
-    floats = [ "Xmessage", "Pinentry-gtk-2", "mplayer2", "Lxappearance", "Nitrogen", "Qtconfig"
-             , "Gcolor2", "Pavucontrol", "Arandr", "Rbutil", "zsnes", "Steam" ]
-
--- Startup {{{1
-myStartupHook sort = setDefaultCursor xC_left_ptr
-    <> runOnce initHook
-    <> setQuery "work" sort
-    <> startService "notify"  "dunst"
-    <> startService "compton" compton
-  where
-    compton  = "compton"  :+ [ "-cGb", "--backend", "glx" ]
-    nitrogen = "nitrogen" :+ [ "--restore" ]
-    initHook = spawn nitrogen
-
--- Keymap {{{1
-myKeys ws browser conf = mkKeymap conf $
-    [ ("M-<Return>", spawn $ terminal conf)
-
-    , ("M-b",  spawn browser)
-    , ("M-\\", tmuxPrompt tmuxSessions myXPConfig)
-    , ("M-p",  shellPrompt myXPConfig)
-
-    , ("M-w", spawn browser)
-    , ("<XF86Launch1>", spawn browser)
-
-    -- scratchpads
-    , ("M-`", namedScratchpadAction scratchpads "scratchpad")
-    , ("M-v", namedScratchpadAction scratchpads "volume")
-    , ("M-n", spawn $ "gnome-control-center" :+ [ "network" ])
-
-    -- quit, close or restart
-    , ("M-S-q",   io exitSuccess)
-    , ("M-S-c",   kill1)
-    , ("M-C-c",   kill)
-    , ("M-S-C-c", spawn "xkill")
-    , ("M-q",     restart "xmonad" True)
-
-    -- layout
-    , ("M-<Space>",   sendMessage NextLayout)
-    , ("M-S-<Space>", sendMessage FirstLayout)
-    , ("M-f",         sendMessage ToggleLayout)
-
-    -- resizing
-    , ("M-[",   sendMessage Shrink)
-    , ("M-]",   sendMessage Expand)
-    , ("M-S-[", sendMessage MirrorExpand)
-    , ("M-S-]", sendMessage MirrorShrink)
-    , ("M-,",   sendMessage $ IncMasterN (-1))
-    , ("M-.",   sendMessage $ IncMasterN 1)
-
-    -- focus
-    , ("M-j", windows W.focusDown)
-    , ("M-k", windows W.focusUp)
-    , ("M-m", windows W.focusMaster)
-    , ("M-t", withFocused' $ windows . W.sink)
-    , ("M-a", focusUrgent)
-
-    -- swapping
-    , ("M-S-m", windows W.shiftMaster)
-    , ("M-S-j", windows W.swapDown)
-    , ("M-S-k", windows W.swapUp)
-    , ("M-0",   sendMessage SwapWindow)
-
-    -- cycle workspaces
-    , ("M-<D>",   moveTo Next skip)
-    , ("M-<U>",   moveTo Prev skip)
-    , ("M-<R>",   moveToNonEmpty Next skip)
-    , ("M-<L>",   moveToNonEmpty Prev skip)
-    , ("M-S-<D>", shiftTo Next skip)
-    , ("M-S-<U>", shiftTo Prev skip)
-    , ("M-S-<R>", shiftToEmpty Next skip)
-    , ("M-S-<L>", shiftToEmpty Prev skip)
-    , ("M-<Tab>", toggleWS [ "NSP" ])
-
-    -- misc keybinds against alt
-    , ("M1-C-l", spawn "slock")
-
-    -- screenshots
-    , ("<Print>",   delayedSpawn 100 $ "scrot" :+ [ scrotDir ])
-    , ("C-<Print>", delayedSpawn 100 $ "scrot" :+ [ "-s", scrotDir ])
-
-    -- media keys
-    , ("<XF86AudioPlay>",        withMPD MPD.toggle)
-    , ("<XF86AudioStop>",        withMPD MPD.stop)
-    , ("<XF86AudioPrev>",        withMPD MPD.previous)
-    , ("<XF86AudioNext>",        withMPD MPD.next)
-    , ("<XF86AudioMute>",        spawn $ "ponymix" :+ [ "toggle" ])
-    , ("<XF86AudioLowerVolume>", spawn $ "ponymix" :+ [ "decrease", "3" ])
-    , ("<XF86AudioRaiseVolume>", spawn $ "ponymix" :+ [ "increase", "3" ])
-
-    -- for happy hacking keyboard
-    , ("M-<F1>",  withMPD MPD.previous)
-    , ("M-<F2>",  withMPD MPD.toggle)
-    , ("M-<F3>",  withMPD MPD.next)
-    , ("M-<F10>", spawn $ "ponymix" :+ [ "toggle" ])
-    , ("M-<F11>", spawn $ "ponymix" :+ [ "decrease", "3" ])
-    , ("M-<F12>", spawn $ "ponymix" :+ [ "increase", "3" ])
-    ]
-    <> wsSwitchKeys (tagSet ws)
-    <> screenSwitchKeys
-    <> searchKeys
-  where
-    skip     = skipWS [ "NSP" ]
-    scrotDir = "/home/santtu/screenshots/%Y-%m-%d_%H:%M:%S_$wx$h.png"
-
-wsSwitchKeys tags = namedTags <> moreTags -- <> screens
-  where
-    namedTags = [ (m <> i, f w) | (i, w) <- zip (show <$> [1..]) tags, (m, f) <- keymap "M-"   ]
-    moreTags  = [ (m <> i, f i) | i      <- show <$> [1..9],           (m, f) <- keymap "M-e " ]
-    keymap p =
-        [ (p,         toggleOrDoSkip [ "NSP" ] W.greedyView)
-        , (p <> "S-", windows . W.shift)
-        ]
-
-screenSwitchKeys = [ ("M-w " <> k, switchScreen i) | (i, k) <- zip [0..] ["1", "2"] ]
-  where
-    switchScreen i = screenWorkspace i >>= flip whenJust (windows . W.view)
-
-searchKeys = [ ("M-s " <> k, S.promptSearch myXPConfig f) | (k, f) <- searchList ]
-  where
-    searchList =
-        [ ("g", S.google)
-        , ("w", S.wikipedia)
-        , ("y", S.youtube)
-        , ("h", S.hoogle)
-        , ("a", S.alpha)
-        , ("d", S.searchEngine "wiktionary" "http://en.wiktionary.org/w/index.php/Special:Search?search=")
-        , ("t", S.searchEngine "piratebay" "http://thepiratebay.org/search/")
-        ]
-
--- Mouse {{{1
-myMouseBindings conf@(XConfig {modMask = modm}) =
-    (`M.union` mouseBindings defaultConfig conf) $ M.fromList
-        [ ((modm,               button2), killWindow)
-        , ((modm,               button3), \w -> focus w >> Flex.mouseResizeWindow w)
-        , ((modm,               button4), const $ moveTo  Prev skip)
-        , ((modm,               button5), const $ moveTo  Next skip)
-        , ((modm .|. shiftMask, button4), const $ shiftTo Prev skip)
-        , ((modm .|. shiftMask, button5), const $ shiftTo Next skip)
-        ]
-  where
-    skip = skipWS [ "NSP" ]
-
--- Themes {{{1
-myTabTheme = defaultTheme
-    { decoHeight          = 18
-    , inactiveBorderColor = colorBlack
-    , inactiveColor       = colorGray
-    , inactiveTextColor   = colorGrayAlt
-    , activeBorderColor   = colorBlack
-    , activeColor         = colorBlue
-    , activeTextColor     = colorDarkGray
-    , urgentBorderColor   = colorBlack
-    , urgentColor         = colorRed
-    , urgentTextColor     = colorDarkGray
+        workspaces         = myWorkspaces,
+        normalBorderColor  = myNormalBorderColor,
+        focusedBorderColor = myFocusedBorderColor,
+ 
+      -- key bindings
+        keys               = myKeys,
+        mouseBindings      = myMouseBindings,
+ 
+      -- hooks, layouts
+        layoutHook         = myLayout,
+        manageHook         = manageSpawn <+> myManageHook,
+        logHook            = myLogHook,
+        startupHook        = myStartupHook
     }
-
-myXPConfig = defaultXPConfig
-    { font              = xftFont
-    , fgColor           = colorBlue
-    , bgColor           = colorBlack
-    , bgHLight          = colorBlack
-    , fgHLight          = colorRed
-    , promptBorderWidth = 0
-    , position          = Bottom
-    }
-
-myVodikConfig = VodikConfig
-    { dzenFont     = "-*-envy code r-medium-r-normal-*-12-*-*-*-*-*-*-*"
-    , dzenBlack    = colorBlack
-    , dzenWhite    = colorWhite
-    , dzenWhiteAlt = colorWhiteAlt
-    , dzenGray     = colorGray
-    , dzenGrayAlt  = colorGrayAlt
-    , dzenBlue     = colorBlue
-    , dzenRed      = colorRed
-    }
--- }}}
-
-getMachine = buildTags $ do
-    host <- nodeName <$> io getSystemID
-
-    tag "work" [ className `queryAny` [ "Aurora", "Firefox", "Chromium" ]
-               , title     =? "MusicBrainz Picard"
-               , className ~? "^[Ll]ibre[Oo]ffice" ]
-
-    tag "term" []
-    tag "code" []
-    tag "chat" [ role =? "irc" ]
-    -- unless (host == "omg") $ tag "virt" [ className =? "VirtualBox" ]
-    -- tag "games" []
-
-main = do
-    machine <- getMachine
-    screen  <- getScreen
-    browser <- browser "firefox"
-
-    -- let tweaks  = getTweaks machine
-    let tweaks = defaultTweaks
-        sort   = workspaceSort "work" machine
-        pos    = positionRationalRect screen
-        config = defaultConfig
-            { manageHook         = myRules machine pos
-            , handleEventHook    = docksEventHook <> fullscreenEventHook
-            , layoutHook         = myLayoutRules sort tweaks
-            , startupHook        = myStartupHook sort
-            , modMask            = myModMask
-            , keys               = myKeys machine browser
-            , mouseBindings      = myMouseBindings
-            , workspaces         = tagSet machine <> fmap show [1..9]
-            , terminal           = myTerminal
-            , borderWidth        = myBorderWidth
-            , normalBorderColor  = colorGray
-            , focusedBorderColor = colorBlue
-            , focusFollowsMouse  = True
-            }
-
-    dzenVodik myVodikConfig config >>= xmonad . applyUrgency colorRed
-
--- vodikTweaks = defaultTweaks
---     { mainWidth  = 2/3
---     }
-
--- gmzljTweaks = defaultTweaks
---     { imWidth    = 1/4
---     , imGrid     = 3/2
---     , wsModifier = filterWS "virt"
---     }
-
--- benoTweaks = defaultTweaks
---     { masterN  = 3
---     }

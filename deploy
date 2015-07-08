@@ -53,7 +53,11 @@ df_base16-shell() { link base16-shell .config/base16-shell;              }
 df_user-dirs()   { link user-dirs/user-dirs.dirs .config/user-dirs.dirs; }
 df_vimperator()  { link vimperator/vimperatorrc;                         }
 df_weechat()     { link weechat;                                         }
-df_xmonad()      { link xmonad;                                          }
+
+df_xmonad() { 
+  link xmonad
+  link xmonad/xmobarrc
+}
 
 df_shell() {
   link shell/zshrc
