@@ -1,15 +1,14 @@
-export GTK_IM_MODULE=fcitx
-export XMODIFIERS=@im=fcitx
-export QT_IM_MODULE=fcitx
+export GTK_IM_MODULE=scim
+export XMODIFIERS=@im=SCIM
+export QT_IM_MODULE=scim
 
-fcitx 
+scim -d
 
 pulseaudio --start &
 
 random_wallpapers
 
 xrdb ~/.Xresources
-
 
 session() {
   exec dbus-launch --exit-with-session "${@}"
