@@ -2,13 +2,14 @@ export GTK_IM_MODULE=fcitx
 export XMODIFIERS=@im=fcitx
 export QT_IM_MODULE=fcitx
 
-fcitx
+fcitx 
 
-pulseaudio --start
+pulseaudio --start &
+
+random_wallpapers
 
 xrdb ~/.Xresources
 
-random_wallpapers
 
 session() {
   exec dbus-launch --exit-with-session "${@}"
