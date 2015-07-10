@@ -51,6 +51,7 @@ df_zsh()         { link zsh;                                             }
 df_mpv()         { link mpv;                                             }
 df_liferea()     { link liferea .config/liferea;                         }
 df_scim()        { link scim;                                            }
+df_rtorrent()    { link rtorrent/rtorrent.rc;                            }
 
 df_xmonad() { 
   link xmonad
