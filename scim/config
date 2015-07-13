@@ -1,4 +1,5 @@
 /FrontEnd/ChangeFactoryGlobally = false
+/FrontEnd/IMOpenedByDefault = false
 /FrontEnd/OnTheSpot = true
 /FrontEnd/SharedInputMethod = false
 /FrontEnd/Socket/ConfigReadOnly = false
@@ -43,4 +44,4 @@
 /Panel/Gtk/ToolBar/ShowMenuIcon = true
 /Panel/Gtk/ToolBar/ShowSetupIcon = true
 /Panel/Gtk/ToolBar/ShowStickIcon = false
-/UpdateTimeStamp = 1436483935:844910
+/UpdateTimeStamp = 1436553270:818297

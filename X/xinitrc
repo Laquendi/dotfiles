@@ -4,6 +4,9 @@ export QT_IM_MODULE=scim
 
 scim -d
 
+setxkbmap dvorak
+xmodmap ~/.Xmodmap
+
 pulseaudio --start &
 
 random_wallpapers

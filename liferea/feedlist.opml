@@ -4,10 +4,13 @@
     <title>Liferea Feed List Export</title>
   </head>
   <body>
-    <outline title="reddit: the front page of the internet" text="reddit: the front page of the internet" description="reddit: the front page of the internet" type="rss" id="wogvooh" sortColumn="time" xmlUrl="http://www.reddit.com/.rss?feed=fb24bd0cfc963e819ad25f9b61d4b7a1894d78e4&amp;user=dxg39" htmlUrl="http://www.reddit.com/" updateInterval="60" collapsed="true"/>
-    <outline title="Muropaketti" text="Muropaketti" description="Muropaketti" type="atom" id="vxybbqa" sortColumn="time" xmlUrl="http://muropaketti.com/feed" htmlUrl="http://muropaketti.com/" updateInterval="-1" collapsed="true"/>
-    <outline title="xkcd" text="xkcd" description="xkcd" type="atom" id="okkbyvt" sortColumn="time" xmlUrl="http://xkcd.com/atom.xml" htmlUrl="http://xkcd.com/" updateInterval="-1" collapsed="true"/>
-    <outline title="Saturday Morning Breakfast Cereal" text="Saturday Morning Breakfast Cereal" description="Saturday Morning Breakfast Cereal" type="rss" id="gtgfmck" sortColumn="time" xmlUrl="http://www.smbc-comics.com/rss.php" htmlUrl="http://www.smbc-comics.com/" updateInterval="-1" collapsed="true"/>
-    <outline title="Arslan" text="Arslan" description="Arslan" type="rss" id="jotfmfj" sortColumn="time" xmlUrl="http://www.nyaa.se/?page=rss&amp;term=ohys+Arslan" htmlUrl="http://www.nyaa.se/" updateInterval="-1" collapsed="true"/>
+    <outline title="reddit: the front page of the internet" text="reddit: the front page of the internet" description="reddit: the front page of the internet" type="rss" id="ecdftki" sortColumn="time" xmlUrl="http://www.reddit.com/.rss?feed=fb24bd0cfc963e819ad25f9b61d4b7a1894d78e4&amp;user=dxg39" htmlUrl="http://www.reddit.com/" updateInterval="60" collapsed="true"/>
+    <outline title="Muropaketti" text="Muropaketti" description="Muropaketti" type="atom" id="cxtvndn" sortColumn="time" xmlUrl="http://muropaketti.com/feed" htmlUrl="http://muropaketti.com/" updateInterval="-1" collapsed="true"/>
+    <outline title="xkcd" text="xkcd" description="xkcd" type="atom" id="vvdfdeh" sortColumn="time" xmlUrl="http://xkcd.com/atom.xml" htmlUrl="http://xkcd.com/" updateInterval="-1" collapsed="true"/>
+    <outline title="Saturday Morning Breakfast Cereal" text="Saturday Morning Breakfast Cereal" description="Saturday Morning Breakfast Cereal" type="rss" id="kikmsum" sortColumn="time" xmlUrl="http://www.smbc-comics.com/rss.php" htmlUrl="http://www.smbc-comics.com/" updateInterval="-1" collapsed="true"/>
+    <outline title="Working!!!" text="Working!!!" description="Working!!!" type="rss" id="rnnxobr" sortColumn="time" xmlUrl="http://www.nyaa.se/?page=rss&amp;term=working!!!+ohys-raws" htmlUrl="http://www.nyaa.se/" updateInterval="-1" collapsed="true"/>
+    <outline title="Rokka no Yuusha" text="Rokka no Yuusha" description="Rokka no Yuusha" type="rss" id="rkevbwt" sortColumn="time" xmlUrl="http://www.nyaa.se/?page=rss&amp;term=rokka+leopard" htmlUrl="http://www.nyaa.se/" updateInterval="-1" collapsed="true"/>
+    <outline title="Arslan" text="Arslan" description="Arslan" type="rss" id="apyddln" sortColumn="time" xmlUrl="http://www.nyaa.se/?page=rss&amp;term=ohys+Arslan" htmlUrl="http://www.nyaa.se/" updateInterval="-1" collapsed="true"/>
+    <outline title="Shirayuki" text="Shirayuki" description="Shirayuki" type="rss" id="namwhfa" sortColumn="time" xmlUrl="http://www.nyaa.se/?page=rss&amp;term=shirayuki+ohys" htmlUrl="http://www.nyaa.se/" updateInterval="-1" collapsed="true"/>
   </body>
 </opml>

@@ -140,8 +140,6 @@ myManageHook = scratchpadManageHookDefault <+> composeAll
   , resource  =? "kdesktop"       --> doIgnore 
   ]
  
-myLogHook = dynamicLog
- 
 myStartupHook = do
     setWMName "LG3D"
     args <- io getArgs
@@ -156,8 +154,11 @@ myStartupHook = do
         spawn "firefox"
         spawnOn "3"  (myTerminal ++ " -e env RUN_IRC=1 zsh -i")
         spawnOn "20"  (myTerminal ++ " -e env RUN_RTORRENT=1 zsh -i")
- 
-main = xmonad =<< xmobar defaults
+
+
+toggleStrutsKey XConfig{modMask = modm} = (modm, xK_l)
+myStatusBar = statusBar "xmobar" xmobarPP{ppOrder = (\(_:_:t:_) -> [t])} toggleStrutsKey
+main = xmonad =<< myStatusBar defaults
 
 defaults = defaultConfig {
       -- simple stuff
@@ -177,6 +178,5 @@ defaults = defaultConfig {
       -- hooks, layouts
         layoutHook         = myLayout,
         manageHook         = manageSpawn <+> myManageHook,
-        logHook            = myLogHook,
         startupHook        = myStartupHook
     }
