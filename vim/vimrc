@@ -28,6 +28,7 @@ NeoBundle 'slim-template/vim-slim'
 NeoBundle 'pbrisbin/vim-syntax-shakespeare'
 NeoBundle 'leafgarland/typescript-vim'
 NeoBundle 'jason0x43/vim-js-indent'
+NeoBundle 'jpalardy/spacehi.vim'
 
 call neobundle#end()
 
@@ -203,3 +204,5 @@ com! DiffSaved call s:DiffWithSaved()
 map Y y$
 
 let g:syntastic_typescript_tsc_args = '--target ES5 --noImplicitAny'
+
+autocmd BufNewFile,BufReadPost,FilterReadPost,FileReadPost,Syntax * SpaceHi
