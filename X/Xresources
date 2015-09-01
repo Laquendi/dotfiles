@@ -3,7 +3,7 @@ Rxvt*scrollBar: false
 
 URxvt*inputMethod: ibus
 URxvt.imLocale: ja_JP.UTF-8
-!URxvt*transparent: true
+URxvt*transparent: true
 URxvt*shading: 15
 URxvt*externalBorder: 0
 URxvt*internalBorder: 0

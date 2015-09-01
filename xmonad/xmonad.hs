@@ -19,6 +19,8 @@ import XMonad.Hooks.SetWMName
 import XMonad.Layout.NoBorders
 import XMonad.Actions.CopyWindow
 import XMonad.SpawnOn
+import XMonad.Layout.LayoutScreens
+import XMonad.Layout.TwoPane
 
 myTerminal      = "urxvt"
  
@@ -87,14 +89,14 @@ myKeys conf = M.fromList $
   -- Switch between monitors
   ++
   [((m .|. modm, key), screenWorkspace sc >>= flip whenJust (windows . f))
-      | (key, sc) <- zip [xK_n, xK_t, xK_s] [0..]
+      | (key, sc) <- zip [xK_t, xK_n, xK_s] [0..]
       , (f, m) <- [(W.view, 0), (W.shift, shiftMask)]]
   -- Switch between workspaces
   ++
   [((m1 .|. m2 .|. modm, k), windows $ f i)
     | (i, (k, m1)) <- zip myWorkspaces myWorkspaceKeys
     , (f, m2) <- [(W.greedyView, 0), (W.shift, shiftMask)]]
- 
+
 -- Mouse bindings
 myMouseBindings (XConfig {XMonad.modMask = modm}) = M.fromList $
     -- mod-button1, Set the window to floating mode and move by dragging
@@ -141,11 +143,11 @@ myManageHook = scratchpadManageHookDefault <+> composeAll
   ]
  
 myStartupHook = do
+    layoutScreens 3 (fixedLayout [(Rectangle 0 0 1920 1200), (Rectangle 1920 0 1920 1200), (Rectangle 3840 0 1920 1080)])
     setWMName "LG3D"
     args <- io getArgs
     -- Check for the first start
     unless ("--resume" `elem` args) $ do
-        spawnOn "16" "liferea"
         spawnOn "17"  (myTerminal ++ " -e env RUN_POSTGRES=1 zsh -i")
         spawnOn "17"  (myTerminal ++ " -e env RUN_GIZLO=1 zsh -i")
         replicateM 4 $ spawnOn "6"  (myTerminal ++ " -e env RUN_GIZLO=1 zsh -i")

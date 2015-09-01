@@ -9,6 +9,9 @@ xmodmap ~/.Xmodmap
 
 pulseaudio --start &
 
+xrandr --setprovideroutputsource modesetting NVIDIA-0
+set_displays.zsh
+
 random_wallpapers
 
 xrdb ~/.Xresources
@@ -31,3 +34,4 @@ case "$2" in
   *)
     session "${2:-xmonad}" ;;
 esac
+

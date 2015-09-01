@@ -29,6 +29,7 @@ NeoBundle 'pbrisbin/vim-syntax-shakespeare'
 NeoBundle 'leafgarland/typescript-vim'
 NeoBundle 'jason0x43/vim-js-indent'
 NeoBundle 'jpalardy/spacehi.vim'
+NeoBundle 'lambdatoast/elm.vim'
 
 call neobundle#end()
 

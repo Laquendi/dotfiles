@@ -62,7 +62,7 @@ alias ls="ls --color=auto"
 alias bc="bc -l"
 alias cal="cal -m3"
 alias pdf="epdfview"
-alias youtube="youtube-dl --no-playlist"
+alias youtube="youtube-dl --no-playlist -r 100K"
 
 export PATH=~/.cabal/bin:$PATH
 export PATH=.cabal-sandbox/bin:$PATH
@@ -126,15 +126,15 @@ if [[ -n $RUN_IRC ]] then
 	ssh evo
 fi
 
-if [[ -n $RUN_RTORRENT ]] then
-	cd /media/disk/anime && rtorrent
-fi
+#if [[ -n $RUN_RTORRENT ]] then
+#	cd /media/disk/anime && rtorrent
+#fi
 
 if [[ -n $RUN_GIZLO ]] then
-	cd ~/src/gizlo
+	cd ~/gizlo-backend
 fi
 if [[ -n $RUN_GIZLO_DASHBOARD ]] then
-	cd ~/gizlo-backend
+	cd ~/gizlo-admin
 fi
 
 if [[ -n $RUN_POSTGRES ]] then
@@ -148,3 +148,5 @@ alias yuizy="livestreamer 'rtmp://zergling.dy.fi/live/yuizy live=1 swfVfy=http:/
 
 export NVM_DIR="/home/santtu/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
+
+export ELM_HOME=~/.nvm/versions/node/v0.12.4/lib/node_modules/elm/share

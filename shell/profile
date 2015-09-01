@@ -1,1 +1,2 @@
 export PATH="$HOME/bin:$PATH:$HOME/.cabal/bin:$HOME/dotfiles/bin"
+if [ -e /home/santtu/.nix-profile/etc/profile.d/nix.sh ]; then . /home/santtu/.nix-profile/etc/profile.d/nix.sh; fi # added by Nix installer
