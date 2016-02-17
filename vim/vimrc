@@ -1,41 +1,6 @@
 set nocompatible               " be iMproved
 
-set runtimepath+=/home/santtu/.vim/bundle/neobundle.vim/
-call neobundle#begin(expand('/home/santtu/.vim/bundle'))
-
-" My Bundles here:
-NeoBundle 'gmarik/vundle'
-NeoBundle 'scrooloose/nerdcommenter'
-NeoBundle 'chriskempson/base16-vim'
-NeoBundle 'travitch/hasksyn'
-"NeoBundle 'Twinside/vim-haskellConceal'
-NeoBundle 'kien/rainbow_parentheses.vim'
-NeoBundle 'Shougo/vimproc.vim', {
-      \ 'build' : {
-      \     'windows' : 'tools\\update-dll-mingw',
-      \     'cygwin' : 'make -f make_cygwin.mak',
-      \     'mac' : 'make -f make_mac.mak',
-      \     'unix' : 'make -f make_unix.mak',
-      \    },
-      \ }
-
-"NeoBundle 'eagletmt/ghcmod-vim'
-NeoBundle 'vim-scripts/Superior-Haskell-Interaction-Mode-SHIM'
-"NeoBundle 'dan-t/vim-hdevtools'
-NeoBundle 'scrooloose/syntastic'
-NeoBundle 'junegunn/vim-easy-align'
-NeoBundle 'slim-template/vim-slim'
-NeoBundle 'pbrisbin/vim-syntax-shakespeare'
-NeoBundle 'leafgarland/typescript-vim'
-NeoBundle 'jason0x43/vim-js-indent'
-
-call neobundle#end()
-
 filetype plugin indent on     " required! 
-
-" If there are uninstalled bundles found on startup,
-" this will conveniently prompt you to install them.
-NeoBundleCheck
 
 nmap <Leader>u :so /home/santtu/.vimrc<cr>
 
@@ -49,10 +14,6 @@ let g:easy_align_delimiters = {
 \ '>': { 'pattern': '->' },
 \ '-': { 'pattern': '-<' }
 \}
-
-"syntastic
-let g:syntastic_mode_map = { 'mode': 'passive', 'active_filetypes': [],'passive_filetypes': [] }
-nmap <leader>a :SyntasticCheck<CR> :SyntasticToggleMode<CR>
 
 "shim
 let g:shim_ghciInterp = "cabal exec ghci"
@@ -109,97 +70,16 @@ let mapleader = "\\"
 
 no Q <Nop>
 
-no <leader>p :HLint<cr>
-
 no + :cn<cr>
 no - :cp<cr>
 
 no <leader><space> :noh<cr>
-
-autocmd FileType haskell nmap <leader>t :HdevtoolsType<cr>
-autocmd FileType haskell nmap <leader>n :HdevtoolsClear<cr>
-autocmd FileType haskell nmap <leader>c :GhcModCheck<cr>
-autocmd FileType haskell nmap <leader>l :GhcModLint<cr>
-autocmd FileType haskell nmap <leader>f :GhciFile<cr>
-autocmd FileType haskell nmap <leader>R :GhciReload<cr>
-autocmd FileType haskell nmap <leader>r :GhciRange<cr>
-autocmd FileType haskell vmap <leader>r y:put<cr>:GhciRange<cr>dd
 
 noremap <C-j> <C-w>j
 noremap <C-k> <C-w>k
 noremap <C-h> <C-w>h
 noremap <C-l> <C-w>l
 
-nmap <Leader>i <plug>NERDCommenterInvert
-xmap <Leader>i <plug>NERDCommenterInvert
-nmap <Leader>m <plug>NERDCommenterMinimal
-xmap <Leader>m <plug>NERDCommenterMinimal
-nmap <Leader>u <plug>NERDCommenterUncomment
-xmap <Leader>u <plug>NERDCommenterUncomment
-"nmap <Leader>a <plug>NERDCommenterAltDelims
-"xmap <Leader>a <plug>NERDCommenterAltDelims
 
 set pastetoggle=<F4>
 
-"hdevtools tmp
-function! FindCabalSandboxRoot()
-    return finddir('.cabal-sandbox', './;')
-endfunction
-function! FindCabalSandboxRootPackageConf()
-    return glob(FindCabalSandboxRoot().'/*-packages.conf.d')
-endfunction
-let g:hdevtools_options = '-g-ilib -g-isrc -g-i. -g-idist/build/autogen -g-Wall -g-package-conf='.FindCabalSandboxRootPackageConf()
-
-let g:rbpt_colorpairs = [
-    \ ['black',       'SeaGreen3'],
-    \ ['brown',       'RoyalBlue3'],
-    \ ['Darkblue',    'SeaGreen3'],
-    \ ['darkgray',    'DarkOrchid3'],
-    \ ['darkgreen',   'firebrick3'],
-    \ ['darkcyan',    'RoyalBlue3'],
-    \ ['darkred',     'SeaGreen3'],
-    \ ['darkmagenta', 'DarkOrchid3'],
-    \ ['red',         'firebrick3'],
-    \ ['brown',       'firebrick3'],
-    \ ['gray',        'RoyalBlue3'],
-    \ ['darkmagenta', 'DarkOrchid3'],
-    \ ['Darkblue',    'firebrick3'],
-    \ ['darkcyan',    'SeaGreen3'],
-    \ ['darkgreen',   'RoyalBlue3'],
-    \ ['darkred',     'DarkOrchid3'],
-    \ ]
-
-"au VimEnter * RainbowParenthesesToggle
-"au VimEnter * RainbowParenthesesLoadSquare
-"au VimEnter * RainbowParenthesesLoadBraces
-
-function! Config_Rainbow()
-    call rainbow_parentheses#load(0)
-    call rainbow_parentheses#load(1)
-    "call rainbow_parentheses#load(2)
-endfunction
-
-function! Load_Rainbow()
-    call rainbow_parentheses#activate()
-endfunction
-
-augroup TastetheRainbow
-    autocmd!
-    autocmd VimEnter,BufRead,BufWinEnter,BufNewFile * call Config_Rainbow()
-    autocmd VimEnter,BufRead,BufWinEnter,BufNewFile * call Load_Rainbow()
-augroup END
-
-autocmd FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
-
-function! s:DiffWithSaved()
-  let filetype=&ft
-  diffthis
-  vnew | r # | normal! 1Gdd
-  diffthis
-  exe "setlocal bt=nofile bh=wipe nobl noswf ro ft=" . filetype
-endfunction
-com! DiffSaved call s:DiffWithSaved()
-
-map Y y$
-
-let g:syntastic_typescript_tsc_args = '--target ES5 --noImplicitAny'

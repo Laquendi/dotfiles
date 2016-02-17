@@ -1,11 +1,14 @@
-Rxvt*font:      xft:Mensch:pixelsize=14:antialias=true,xft:IPAGothic,xft:Baekmuk Dotum:pixelsize=14,xft:WenQuanYi Micro Hei Mono
+Rxvt*font:      xft:Mensch:pixelsize=13,xft:IPAGothic,xft:Baekmuk Dotum:pixelsize=13,xft:WenQuanYi Micro Hei Mono
 Rxvt*scrollBar: false
 
 URxvt*inputMethod: ibus
 URxvt.imLocale: ja_JP.UTF-8
 URxvt*transparent: true
 URxvt*shading: 15
+URxvt*externalBorder: 0
+URxvt*internalBorder: 0
 URxvt*borderless: true
+URxvt*background: #181818
 
 URxvt.perl-ext-common:      default,clipboard,url-select,keyboard-select,matcher
 URxvt.url-select.launcher:  firefox

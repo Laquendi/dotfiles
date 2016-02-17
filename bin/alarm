@@ -1,0 +1,3 @@
+time=${1:-"8:30"}
+alarm_cmd
+at $time -f /home/santtu/dotfiles/bin/alarm_cmd

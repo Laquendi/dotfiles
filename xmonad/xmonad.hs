@@ -16,9 +16,10 @@ import XMonad.Hooks.DynamicLog
 import XMonad.Hooks.ManageDocks
 import XMonad.Hooks.ManageHelpers
 import XMonad.Hooks.SetWMName
+import XMonad.Hooks.EwmhDesktops
 import XMonad.Layout.NoBorders
 import XMonad.Actions.CopyWindow
-import XMonad.SpawnOn
+import XMonad.Actions.SpawnOn
 
 myTerminal      = "urxvt"
  
@@ -87,7 +88,8 @@ myKeys conf = M.fromList $
   -- Switch between monitors
   ++
   [((m .|. modm, key), screenWorkspace sc >>= flip whenJust (windows . f))
-      | (key, sc) <- zip [xK_n, xK_t, xK_s] [0..]
+      -- | (key, sc) <- zip [xK_minus, xK_n, xK_t, xK_s] [0..]
+      | (key, sc) <- zip [xK_n, xK_minus, xK_t, xK_s] [0..]
       , (f, m) <- [(W.view, 0), (W.shift, shiftMask)]]
   -- Switch between workspaces
   ++
@@ -111,7 +113,7 @@ myMouseBindings (XConfig {XMonad.modMask = modm}) = M.fromList $
     -- you may also bind events to the mouse scroll wheel (button4 and button5)
     ]
  
-myLayout = avoidStruts $ smartBorders (tiled ||| Mirror tiled ||| Full)
+myLayout = avoidStruts $ smartBorders (tiled ||| Mirror tiled) ||| noBorders Full
   where
     tiled   = Tall nmaster delta ratio
     nmaster = 1
@@ -127,9 +129,9 @@ myManageHook = scratchpadManageHookDefault <+> composeAll
   , className =? "mupen64plus"        --> doFloat
   , className =? "Pavucontrol"        --> doFloat
   , className =? "Steam"        --> doFloat
-  , className =? "DOTA 2 - OpenGL"        --> doFullFloat
-  , className =? "dota_linux"        --> doFullFloat
-  , className =? "dota.sh"        --> doFullFloat
+  --, className =? "DOTA 2 - OpenGL"        --> doFullFloat
+  --, className =? "dota_linux"        --> doFullFloat
+  --, className =? "dota.sh"        --> doFullFloat
   , className =? "Gimp"           --> doFloat
   , className =? "Vlc"           --> doFloat
   , title =? "neflEFortress" --> doFloat
@@ -145,11 +147,12 @@ myStartupHook = do
     args <- io getArgs
     -- Check for the first start
     unless ("--resume" `elem` args) $ do
+        spawnOn "1"  "zim"
+        spawnOn "1"  (myTerminal ++ " -e env RUN_ZIM=1 zsh -i")
         spawnOn "16" "liferea"
         spawnOn "17"  (myTerminal ++ " -e env RUN_POSTGRES=1 zsh -i")
         spawnOn "17"  (myTerminal ++ " -e env RUN_GIZLO=1 zsh -i")
-        replicateM 4 $ spawnOn "6"  (myTerminal ++ " -e env RUN_GIZLO=1 zsh -i")
-        replicateM 4 $ spawnOn "7"  (myTerminal ++ " -e env RUN_GIZLO_DASHBOARD=1 zsh -i")
+        replicateM 4 $ spawnOn "7"  (myTerminal ++ " -e env RUN_GIZLO=1 zsh -i")
         spawnOn "10" "tagainijisho"
         spawn "firefox"
         spawnOn "3"  (myTerminal ++ " -e env RUN_IRC=1 zsh -i")
@@ -160,7 +163,7 @@ toggleStrutsKey XConfig{modMask = modm} = (modm, xK_l)
 myStatusBar = statusBar "xmobar" xmobarPP{ppOrder = (\(_:_:t:_) -> [t])} toggleStrutsKey
 main = xmonad =<< myStatusBar defaults
 
-defaults = defaultConfig {
+defaults = ewmh $ defaultConfig {
       -- simple stuff
         terminal           = myTerminal,
         focusFollowsMouse  = myFocusFollowsMouse,
@@ -178,5 +181,8 @@ defaults = defaultConfig {
       -- hooks, layouts
         layoutHook         = myLayout,
         manageHook         = manageSpawn <+> myManageHook,
-        startupHook        = myStartupHook
+        startupHook        = myStartupHook,
+
+        -- http://xmonad.org/xmonad-docs/xmonad-contrib/XMonad-Hooks-EwmhDesktops.html
+        handleEventHook    = handleEventHook defaultConfig <+> fullscreenEventHook
     }

@@ -64,14 +64,10 @@ alias cal="cal -m3"
 alias pdf="epdfview"
 alias youtube="youtube-dl --no-playlist"
 
-export PATH=~/.cabal/bin:$PATH
-export PATH=.cabal-sandbox/bin:$PATH
-export PATH=$PATH:/usr/local/sbin/:~/bin
-export PATH=$PATH:/usr/bin/
-export PATH=$PATH:~/bin/
-export PATH=$PATH:~/.local/bin
+#export PATH=$PATH:/usr/local/sbin/
+#export PATH=$PATH:/usr/bin/
 
-export PYTHONPATH=$PYTHONPATH:~/.local
+#export PYTHONPATH=$PYTHONPATH:~/.local
 
 autoload colors zsh/terminfo
 if [[ "$terminfo[colors]" -ge 8 ]]; then
@@ -119,7 +115,7 @@ export KEYTIMEOUT=1
 
 export ncpus=8
 
-export PGDATA=/usr/lib/pgsql/data
+export PGDATA=/var/lib/postgres/data
 export LD_LIBRARY_PATH=/usr/lib/nvidia:/usr/lib32/nvidia:$LD_LIBRARY_PATH
 
 if [[ -n $RUN_IRC ]] then
@@ -131,14 +127,17 @@ if [[ -n $RUN_RTORRENT ]] then
 fi
 
 if [[ -n $RUN_GIZLO ]] then
-	cd ~/src/gizlo
+	cd ~/src/gizlo-backend
 fi
 if [[ -n $RUN_GIZLO_DASHBOARD ]] then
-	cd ~/gizlo-backend
+	cd ~/src/old_gizlo/gizlo-backend
 fi
 
 if [[ -n $RUN_POSTGRES ]] then
 	sudo su postgres
+fi
+if [[ -n $RUN_ZIM ]] then
+	cd ~/Notes
 fi
 
 alias monstercat="livestreamer 'http://www.twitch.tv/monstercat' best"
@@ -148,3 +147,4 @@ alias yuizy="livestreamer 'rtmp://zergling.dy.fi/live/yuizy live=1 swfVfy=http:/
 
 export NVM_DIR="/home/santtu/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
+

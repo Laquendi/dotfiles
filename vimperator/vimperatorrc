@@ -1,5 +1,5 @@
 set toolbars=noaddons,nobookmarks,nomenu,nonavigation,tabs
-set noscrollbars
+"set noscrollbars
 
 set showstatuslinks=1
 set nofocuscontent
