@@ -1,0 +1,20 @@
+#!/usr/bin/expect -f
+
+set prompt "\[(bluetooth|bossi)\]#"
+set timeout 1
+
+spawn pulseaudio "-D"
+expect "*"
+
+spawn bluetoothctl
+expect -re "Agent registered.*$prompt"
+
+send "power on\r"
+
+expect -re ".*Changing power on succeeded.*$prompt"
+
+send "connect 04:52:C7:C7:3F:77\r"
+expect -re ".*Connection successful.*$prompt"
+
+send "quit\r"
+expect "*"

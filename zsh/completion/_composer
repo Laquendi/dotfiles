@@ -1,4 +1,0 @@
-#compdef composer
-
-
-_arguments '*: :_files'
