@@ -1,4 +1,4 @@
-*font:      xft:inconsolata:pixelsize=15,xft:IPAPGothic
+*font:      xft:inconsolata:pixelsize=15:antialias=true,xft:IPAPGothic
 
 Rxvt.xftAntialias:     true
 Rxvt.scrollBar:        False
@@ -51,5 +51,5 @@ URxvt.keysym.M-s:           perl:keyboard-select:search
 *color14: #a3685a
 
 !! white dark/light
-*color7: #x4d4d4c
+*color7: #4d4d4c
 *color15: #1d1f21
