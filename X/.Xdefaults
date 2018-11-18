@@ -1,0 +1,55 @@
+*font:      xft:inconsolata:pixelsize=15,xft:IPAPGothic
+
+Rxvt.xftAntialias:     true
+Rxvt.scrollBar:        False
+Rxvt.saveLines: 0
+
+Rxvt*transparent: false
+Rxvt*externalBorder: 0
+Rxvt*internalBorder: 0
+Rxvt*borderless: true
+
+URxvt.perl-ext-common:      default,clipboard,url-select,keyboard-select,matcher
+URxvt.url-select.launcher:  firefox
+URxvt.url-select.underline: true
+URvxt.url-select.button:    3
+URxvt.keysym.M-u:           perl:url-select:select_next
+URxvt.keysym.M-Escape:      perl:keyboard-select:activate
+URxvt.keysym.M-s:           perl:keyboard-select:search
+
+*background: #ffffff
+*foreground: #4d4d4c
+
+!! Base16 Tomorrow
+
+!! black dark/light
+*color0: #ffffff
+*color8: #8e908c
+
+!! red dark/light
+*color1: #c82829
+*color9: #f5871f
+
+!! green dark/light
+*color2: #718c00
+*color10: #e0e0e0
+
+!! yellow dark/light
+*color3: #eab700
+*color11: #d6d6d6
+
+!! blue dark/light
+*color4: #4271ae
+*color12: #969896
+
+!! magenta dark/light
+*color5: #282a2e
+*color13: #8959a8
+
+!! cyan dark/light
+*color6: #3e999f
+*color14: #a3685a
+
+!! white dark/light
+*color7: #x4d4d4c
+*color15: #1d1f21
