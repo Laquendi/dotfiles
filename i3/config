@@ -15,6 +15,9 @@ default_orientation vertical
 
 for_window [class="mpv"] floating enable
 for_window [class="pavucontrol"] floating enable
+for_window [title="Explorer"] floating enable
+for_window [title="Smart Media Cutter"] floating enable
+for_window [title="Simulator"] floating enable
 
 # Font for window titles. Will also be used by the bar unless a different font
 # is used in the bar {} block below.
@@ -35,29 +38,32 @@ font pango:inconsolata 4
 floating_modifier $mod
 
 # start a terminal
-bindsym $mod+Return exec urxvtc
+bindsym $mod+Return exec urxvt
+
+bindsym $mod+F1 exec setxkbmap -layout us -variant dvorak && xmodmap ~/.Xmodmap
+bindsym $mod+F2 exec setxkbmap fi
+bindsym $mod+F3 exec setxkbmap ua
 
 # kill focused window
 bindsym $mod+Shift+q kill
 
 # start dmenu (a program launcher)
-bindsym $mod+d exec dmenu_run
+#bindsym $mod+d exec dmenu_run
+bindsym $mod+d exec rofi -combi-modi window#drun -theme solarized -font "hack 10" -show combi
 # There also is the (new) i3-dmenu-desktop which only displays applications
 # shipping a .desktop file. It is a wrapper around dmenu, so you need that
 # installed.
 # bindsym $mod+d exec --no-startup-id i3-dmenu-desktop
+
+# move workplaces between monitors
+bindsym $mod+Right move workspace to output right
+bindsym $mod+Left move workspace to output left
 
 # change focus
 bindsym $mod+h focus left
 bindsym $mod+j focus down
 bindsym $mod+k focus up
 bindsym $mod+l focus right
-
-# alternatively, you can use the cursor keys:
-bindsym $mod+Left focus left
-bindsym $mod+Down focus down
-bindsym $mod+Up focus up
-bindsym $mod+Right focus right
 
 # move focused window
 bindsym $mod+Shift+H move left
@@ -134,10 +140,12 @@ bindsym $mod+Shift+comma move container to workspace $ws8
 bindsym $mod+Shift+period move container to workspace $ws9
 bindsym $mod+Shift+p move container to workspace $ws10
 
+bindsym $mod+q exec /home/santtu/bin/toggle_audio.sh
+
 # reload the configuration file
 bindsym $mod+Shift+C reload
 # restart i3 inplace (preserves your layout/session, can be used to upgrade i3)
-bindsym $mod+Shift+P restart
+bindsym $mod+Shift+r restart
 # exit i3 (logs you out of your X session)
 bindsym $mod+Shift+greater exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -B 'Yes, exit i3' 'i3-msg exit'"
 
@@ -173,7 +181,30 @@ bindsym $mod+Shift+o exec i3lock -c 000000 && xset dpms force off
 # Start i3bar to display a workspace bar (plus the system information i3status
 # finds out, if available)
 bar {
-	font pango:inconsolata 8
+	font pango:inconsolata 12
         status_command i3status
 	position top
+	output DisplayPort-1
 }
+
+# autostart firefox on workspace 1
+assign [class="(?i)firefox"] 1
+exec --no-startup-id firefox
+
+# autostart google-chrome, telegram-desktop and discord on workspace 7
+assign [class="(?i)google-chrome"] 7
+assign [class="(?i)telegram-desktop"] 7
+assign [class="(?i)discord"] 7
+exec --no-startup-id google-chrome
+exec --no-startup-id telegram-desktop
+exec --no-startup-id discord
+
+## Screenshots
+bindsym Print exec --no-startup-id maim "/home/$USER/screenshots/$(date)"
+bindsym $mod+Print exec --no-startup-id maim --window $(xdotool getactivewindow) "/home/$USER/screenshots/$(date)"
+bindsym Shift+Print exec --no-startup-id maim --select "/home/$USER/screenshots/$(date)"
+
+## Clipboard Screenshots
+bindsym Ctrl+Print exec --no-startup-id maim | xclip -selection clipboard -t image/png
+bindsym Ctrl+$mod+Print exec --no-startup-id maim --window $(xdotool getactivewindow) | xclip -selection clipboard -t image/png
+bindsym Ctrl+Shift+Print exec --no-startup-id maim --select | xclip -selection clipboard -t image/png
